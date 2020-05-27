@@ -20,7 +20,28 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
   state: {
-
+    events: [
+      {
+        eventSport: "Fotboll",
+        eventTitle: "Fotbollsmatch",
+        eventDescription: "Vi ska spela fotboll",
+        eventGoers: ["Frank, Jakob"],
+        eventUser: 1
+      },
+      {
+        eventSport: "Basket",
+        eventTitle: "21an",
+        eventDescription: "21an yo!",
+        eventGoers: ["Frank, Jakob"],
+        eventUser: 1
+      }
+    ],
+    eventIndex: 0
+  },
+  mutations: {
+    setEventIndex(state, newIndex) {
+      state.eventIndex = newIndex
+    }
   }
 })
 
