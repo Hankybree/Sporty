@@ -25,14 +25,14 @@ const store = new Vuex.Store({
         eventSport: "Fotboll",
         eventTitle: "Fotbollsmatch",
         eventDescription: "Vi ska spela fotboll",
-        eventGoers: ["Frank, Jakob"],
+        eventGoers: ["Frank-Jakob", "Jakob"],
         eventUser: 1
       },
       {
         eventSport: "Basket",
         eventTitle: "21an",
         eventDescription: "21an yo!",
-        eventGoers: ["Frank, Jakob"],
+        eventGoers: ["Frank-Jakob", "Jakob"],
         eventUser: 1
       }
     ],
