@@ -46,6 +46,6 @@ header {
   color: white;
 }
 #view {
-  height: 80vh;
+  min-height: 80vh;
 }
 </style>

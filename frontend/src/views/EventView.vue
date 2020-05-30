@@ -4,9 +4,9 @@
       <h1>Evenemang</h1>
       <input type="button" value="Skapa nytt evenemang" @click="$store.dispatch('openPostUI')">
       <div id="post-ui" v-if="$store.state.showPostUI">
-        <input id="e-sport" type="text" placeholder="Vilken sport?">
-        <input id="e-title" type="text" placeholder="Ge evenemanget en titel...">
-        <textarea id="e-description" placeholder="Beskriv evenemanget..." cols="30" rows="10"></textarea>
+        <input id="post-sport" type="text" placeholder="Vilken sport?">
+        <input id="post-title" type="text" placeholder="Ge evenemanget en titel...">
+        <textarea id="post-description" placeholder="Beskriv evenemanget..." cols="30" rows="10"></textarea>
         <input type="button" value="Skapa" @click="$store.dispatch('postEvent')">
       </div>
       <div v-if="$store.state.events.length > 0">
@@ -27,8 +27,13 @@
         <div id="type">Detta är ett event av typen: {{ $store.state.events[$store.state.eventIndex].eventSport }}</div>
         <div id="description">{{ $store.state.events[$store.state.eventIndex].eventDescription }}</div>
         <div id="created-by">Skapat av: {{ $store.state.events[$store.state.eventIndex].eventUser }}</div>
-        <input type="button" value="Redigera">
-        <div id="patch-ui"></div>
+        <input type="button" value="Redigera" @click="$store.dispatch('openPatchUI')">
+        <div id="patch-ui" v-if="$store.state.showPatchUI">
+          <input id="patch-sport" type="text" placeholder="Vilken sport?" :value="$store.state.events[$store.state.eventIndex].eventSport">
+          <input id="patch-title" type="text" placeholder="Ge evenemanget en titel..." :value="$store.state.events[$store.state.eventIndex].eventTitle">
+          <textarea id="patch-description" placeholder="Beskriv evenemanget..." cols="30" rows="10" v-model="$store.state.events[$store.state.eventIndex].eventDescription"></textarea>
+          <input type="button" value="Spara ändringar" @click="$store.dispatch('patchEvent')">
+        </div>
         <input type="button" value="Radera" @click="$store.dispatch('deleteEvent')">
       </div>
       <div v-else>
@@ -80,4 +85,9 @@ export default {
     display: flex;
     flex-direction: column;
   }
+  #patch-ui {
+    display: flex;
+    flex-direction: column;
+  }
+
 </style>
