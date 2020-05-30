@@ -32,7 +32,13 @@ app.get('/events', (request, response) => {
 })
 
 app.get('/events/:event', (request, response) => {
-    response.send('get one')
+    database.all('SELECT * FROM events WHERE eventId=?', [request.params.event])
+        .then((events) => {
+            console.log(events[0])
+            events[0].eventGoers = JSON.parse(events[0].eventGoers)
+
+            response.send(events[0])
+        })
 })
 
 app.post('/events', (request, response) => {
