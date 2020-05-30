@@ -57,7 +57,24 @@ app.post('/events', (request, response) => {
 })
 
 app.patch('/events/:event', (request, response) => {
-    response.send('patch')
+    database.all('SELECT * FROM events WHERE eventId=?', [request.params.event])
+        .then((events) => {
+
+            events[0].eventGoers = JSON.parse(events[0].eventGoers)
+            
+            let updatedEvent = Object.assign(events[0], request.body)
+
+            database.run('UPDATE events SET eventSport=?, eventTitle=?, eventDescription=?, eventGoers=? WHERE eventId=?',
+            [
+                updatedEvent.eventSport,
+                updatedEvent.eventTitle,
+                updatedEvent.eventDescription,
+                JSON.stringify(updatedEvent.eventGoers),
+                request.params.event
+            ]).then(() => {
+                response.send(updatedEvent)
+            })
+        })
 })
 
 app.delete('/events/:event', (request, response) => {
