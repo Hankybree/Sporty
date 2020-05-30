@@ -33,5 +33,14 @@ export const actions = {
             context.commit('setPostUI', false)
             context.dispatch('getEvents')
         })
+    },
+    deleteEvent(context) {
+        fetch('http://localhost:3000/events/' + context.state.events[context.state.eventIndex].eventId, {
+            method: 'DELETE'
+        }).then(response => response)
+        .then(result => {
+            console.log(result)
+            context.dispatch('getEvents')
+        })
     }
 }

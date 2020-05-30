@@ -9,21 +9,31 @@
         <textarea id="e-description" placeholder="Beskriv evenemanget..." cols="30" rows="10"></textarea>
         <input type="button" value="Skapa" @click="$store.dispatch('postEvent')">
       </div>
-      <div :key="index" v-for="(event, index) in $store.state.events">
-        <div @click="selectEvent(index)">{{ event.eventTitle }}</div>
+      <div v-if="$store.state.events.length > 0">
+        <div :key="index" v-for="(event, index) in $store.state.events">
+          <div @click="selectEvent(index)">{{ event.eventTitle }}</div>
+        </div>
       </div>
     </div>
     <div id="event">
-      <h1 id="title">{{ $store.state.events[$store.state.eventIndex].eventTitle }}</h1>
-      <h2>Dessa kommer:</h2>
-      <div id="participants">
-        <div :key="goer" v-for="goer in $store.state.events[$store.state.eventIndex].eventGoers">
-          {{ goer }}
+      <div v-if="$store.state.events.length > 0">
+        <h1 id="title">{{ $store.state.events[$store.state.eventIndex].eventTitle }}</h1>
+        <h2>Dessa kommer:</h2>
+        <div id="participants">
+          <div :key="goer" v-for="goer in $store.state.events[$store.state.eventIndex].eventGoers">
+            {{ goer }}
+          </div>
         </div>
+        <div id="type">Detta är ett event av typen: {{ $store.state.events[$store.state.eventIndex].eventSport }}</div>
+        <div id="description">{{ $store.state.events[$store.state.eventIndex].eventDescription }}</div>
+        <div id="created-by">Skapat av: {{ $store.state.events[$store.state.eventIndex].eventUser }}</div>
+        <input type="button" value="Redigera">
+        <div id="patch-ui"></div>
+        <input type="button" value="Radera" @click="$store.dispatch('deleteEvent')">
       </div>
-      <div id="type">Detta är ett event av typen: {{ $store.state.events[$store.state.eventIndex].eventSport }}</div>
-      <div id="description">{{ $store.state.events[$store.state.eventIndex].eventDescription }}</div>
-      <div id="created-by">Skapat av: {{ $store.state.events[$store.state.eventIndex].eventUser }}</div>
+      <div v-else>
+        <h1>Här var det tomt! Skapa ett nytt evenemang</h1>
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +69,7 @@ export default {
     flex-grow: 1;
     text-align: center;
   }
-  #event > div {
+  #event > div > div {
     margin: 20px;
   }
   #participants {
