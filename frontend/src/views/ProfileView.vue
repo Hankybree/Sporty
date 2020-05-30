@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    Profile {{ $route.params.user }}
+    Profil {{ $route.params.anvandare }}
   </div>
 </template>
 

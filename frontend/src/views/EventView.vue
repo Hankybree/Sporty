@@ -1,7 +1,14 @@
 <template>
   <div class="content">
     <div id="ui">
-      <h1>Events</h1>
+      <h1>Evenemang</h1>
+      <input type="button" value="Skapa nytt evenemang" @click="$store.dispatch('openPostUI')">
+      <div id="post-ui" v-if="$store.state.showPostUI">
+        <input id="e-sport" type="text" placeholder="Vilken sport?">
+        <input id="e-title" type="text" placeholder="Ge evenemanget en titel...">
+        <textarea id="e-description" placeholder="Beskriv evenemanget..." cols="30" rows="10"></textarea>
+        <input type="button" value="Skapa" @click="$store.dispatch('postEvent')">
+      </div>
       <div :key="index" v-for="(event, index) in $store.state.events">
         <div @click="selectEvent(index)">{{ event.eventTitle }}</div>
       </div>
@@ -22,19 +29,14 @@
 </template>
 
 <script>
+import {computed} from '../scripts/computed.js'
 
 export default {
-  name: 'EventView',
-  computed: {
-    eventIndex: {
-      get() {
-        return this.$store.state.eventIndex
-      },
-      set(newIndex) {
-        this.state.commit('setEventIndex', newIndex)
-      }
-    }
+  beforeCreate() {
+    this.$store.dispatch('getEvents')
   },
+  name: 'EventView',
+  computed: computed,
   methods: {
     selectEvent(newIndex) {
       this.$store.state.eventIndex = newIndex
@@ -50,12 +52,10 @@ export default {
   #ui {
     background-color: red;
     color: white;
-    height: 90vh;
     width: 25vw;
   }
   #event {
     background-color: yellow;
-    height: 90vh;
     flex-grow: 1;
     text-align: center;
   }
@@ -65,5 +65,9 @@ export default {
   #participants {
     display: inline-flex;
     flex-direction: row;
+  }
+  #post-ui {
+    display: flex;
+    flex-direction: column;
   }
 </style>

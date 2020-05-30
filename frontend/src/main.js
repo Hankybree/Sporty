@@ -7,40 +7,44 @@ import HomeView from './views/HomeView.vue'
 import ProfileView from './views/ProfileView.vue'
 import EventView from './views/EventView.vue'
 
+import {actions} from './scripts/actions.js'
+
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
 const router = new VueRouter({
   routes: [
     { component: HomeView, path: '/'},
-    { component: ProfileView, path: '/profile/:user' },
-    { component: EventView, path: '/events' }
+    { component: ProfileView, path: '/profil/:anvandare' },
+    { component: EventView, path: '/evenemang' }
   ]
 })
 
 const store = new Vuex.Store({
+  actions: actions,
   state: {
     events: [
       {
-        eventSport: "Fotboll",
-        eventTitle: "Fotbollsmatch",
-        eventDescription: "Vi ska spela fotboll",
-        eventGoers: ["Frank-Jakob", "Jakob"],
-        eventUser: 1
-      },
-      {
-        eventSport: "Basket",
-        eventTitle: "21an",
-        eventDescription: "21an yo!",
-        eventGoers: ["Frank-Jakob", "Jakob"],
+        eventSport: "",
+        eventTitle: "",
+        eventDescription: "",
+        eventGoers: [],
         eventUser: 1
       }
     ],
-    eventIndex: 0
+    eventIndex: 0,
+    showPostUI: false,
+    activeUser: 1
   },
   mutations: {
+    setEvents(state, newEvents) {
+      state.events = newEvents
+    },
     setEventIndex(state, newIndex) {
       state.eventIndex = newIndex
+    },
+    setPostUI(state, newPostUI) {
+      state.showPostUI = newPostUI
     }
   }
 })
