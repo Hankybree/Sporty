@@ -78,6 +78,9 @@ app.patch('/events/:event', (request, response) => {
 })
 
 app.delete('/events/:event', (request, response) => {
-    response.send('delete')
+    database.run('DELETE FROM events WHERE eventId=?', [request.params.event])
+        .then(() => {
+            response.send('Event deleted')
+        })
 })
 
