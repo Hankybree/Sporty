@@ -42,7 +42,18 @@ app.get('/events/:event', (request, response) => {
 })
 
 app.post('/events', (request, response) => {
-    response.send('post')
+    database.run('INSERT INTO events (eventSport, eventTitle, eventDescription, eventGoers, eventUser) VALUES (?, ?, ?, ?, ?)', 
+    [
+        request.body.eventSport,
+        request.body.eventTitle,
+        request.body.eventDescription,
+        JSON.stringify(request.body.eventGoers),
+        request.body.eventUser
+    ]).then(() => {
+        response.status(201).send(request.body)
+    }).catch(error => {
+        response.send(error)
+    })
 })
 
 app.patch('/events/:event', (request, response) => {
