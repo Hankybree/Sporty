@@ -1,24 +1,49 @@
 const express = require('express')
+const cors = require('cors')
+const sqlite = require('sqlite')
+const sqlite3 = require('sqlite3')
 
 const app = express()
 
-app.listen({ port: 3000 }, () => {
-    console.log('nu funkar det')
+app.use(express.json())
+app.use(cors())
+
+app.listen(3000, () => {
+    console.log('Listening on port 3000')
 })
 
-app.get('/', (request, response) => {
+let database
+
+sqlite.open({ driver: sqlite3.Database, filename: 'database.sqlite'})
+    .then((database_) => {
+        database = database_
+    })
+
+app.get('/events', (request, response) => {
+    database.all('SELECT * FROM events')
+    .then((events) => {
+
+        events.forEach(event => {
+            event.eventGoers = JSON.parse(event.eventGoers)
+        })
+
+        response.send(events)
+    })
+})
+
+app.get('/events/:event', (request, response) => {
     response.send('get one')
 })
 
-app.get('/', (request, response) => {
-    response.send('get many')
-})
-
-app.post('/', (request, response) => {
+app.post('/events', (request, response) => {
     response.send('post')
 })
 
-app.delete('/', (request, response) => {
+app.patch('/events/:event', (request, response) => {
+    response.send('patch')
+})
 
+app.delete('/events/:event', (request, response) => {
+    response.send('delete')
 })
 
