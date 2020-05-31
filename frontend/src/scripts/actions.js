@@ -1,14 +1,14 @@
 export const actions = {
 
     getEvents(context) {
-        fetch('http://localhost:3000/events')
+        fetch('http://116.203.125.0:3500/events')
             .then(response => response.json())
             .then(result => {
                 context.commit('setEvents', result)
             })
     },
     postEvent(context) {
-        fetch('http://localhost:3000/events', {
+        fetch('http://116.203.125.0:3500/events', {
             body: JSON.stringify({
                 eventSport: document.querySelector('#post-sport').value,
                 eventTitle: document.querySelector('#post-title').value,
@@ -28,7 +28,7 @@ export const actions = {
         })
     },
     patchEvent(context) {
-        fetch('http://localhost:3000/events/' + context.state.events[context.state.eventIndex].eventId, {
+        fetch('http://116.203.125.0:3500/events/' + context.state.events[context.state.eventIndex].eventId, {
             body: JSON.stringify({
                 eventSport: document.querySelector('#patch-sport').value,
                 eventTitle: document.querySelector('#patch-title').value,
@@ -46,7 +46,7 @@ export const actions = {
         })
     },
     deleteEvent(context) {
-        fetch('http://localhost:3000/events/' + context.state.events[context.state.eventIndex].eventId, {
+        fetch('http://116.203.125.0:3500/events/' + context.state.events[context.state.eventIndex].eventId, {
             method: 'DELETE'
         }).then(response => response)
         .then(result => {
