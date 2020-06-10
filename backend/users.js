@@ -51,16 +51,19 @@ module.exports = function (app, database, accessToken) {
                 }
 
                 if (users[0].userPassword === request.body.userPassword) {
-                    // Skapa token och gör POST till session
+                    
                     database.all('SELECT * FROM sessions WHERE sessionUserId=?', [users[0].userId])
                         .then((sessions) => {
                             if (sessions[0] === undefined) {
+
+                                const token = accessToken.v4()
+
                                 database.run('INSERT INTO sessions (sessionUserId, sessionToken) VALUES (?, ?)',
                                     [
                                         users[0].userId,
-                                        accessToken.v4()
+                                        token
                                     ]).then(() => {
-                                        response.send('Logged in')
+                                        response.send(token)
                                     })
                             } else {
                                 response.send('Already logged in')
@@ -70,6 +73,20 @@ module.exports = function (app, database, accessToken) {
                     response.send('Incorrect username or password')
                 }
             })
+    })
+
+    app.delete('/logout', (request, response) => {
+
+        if (request.get('Token')) {
+
+            database.run('DELETE FROM sessions WHERE sessionToken=?', [request.get('Token')])
+            .then(() => {
+                response.send('Logged out')
+            })
+            
+        } else {
+            response.send('You are not logged in')
+        }
     })
 
     // Only for testing
