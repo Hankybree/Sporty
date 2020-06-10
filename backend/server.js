@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const sqlite = require('sqlite')
 const sqlite3 = require('sqlite3')
+const { v4: uuidv4 } = require('uuid')
 
 const app = express()
 
@@ -22,6 +23,6 @@ sqlite.open({ driver: sqlite3.Database, filename: 'database.sqlite'})
         database = database_
 
         events(app, database)
-        users(app, database)
+        users(app, database, { v4: uuidv4 })
     })
 
