@@ -13,8 +13,7 @@ export const actions = {
                 eventSport: document.querySelector('#post-sport').value,
                 eventTitle: document.querySelector('#post-title').value,
                 eventDescription: document.querySelector('#post-description').value,
-                eventGoers: ["my-username(placeholder)"],
-                eventUser: context.state.activeUser
+                eventGoers: ["my-username(placeholder)"]
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -67,5 +66,17 @@ export const actions = {
         } else {
             context.commit('setPatchUI', false)
         }
+    },
+    signup() {
+        
+    },
+    login() {
+
+    },
+    logout() {
+
+    },
+    deleteAccount() {
+
     }
 }

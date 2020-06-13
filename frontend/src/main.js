@@ -35,7 +35,7 @@ const store = new Vuex.Store({
     eventIndex: 0,
     showPostUI: false,
     showPatchUI: false,
-    activeUser: 1
+    activeUser: -1
   },
   mutations: {
     setEvents(state, newEvents) {
@@ -49,6 +49,9 @@ const store = new Vuex.Store({
     },
     setPatchUI(state, newPatchUI) {
       state.showPatchUI = newPatchUI
+    },
+    setActiveUser(state, newActiveUser) {
+      state.activeUser = newActiveUser
     }
   }
 })

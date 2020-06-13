@@ -4,10 +4,7 @@
       <h1>Evenemang</h1>
       <input type="button" value="Skapa nytt evenemang" @click="$store.dispatch('openPostUI')">
       <div id="post-ui" v-if="$store.state.showPostUI">
-        <input id="post-sport" type="text" placeholder="Vilken sport?">
-        <input id="post-title" type="text" placeholder="Ge evenemanget en titel...">
-        <textarea id="post-description" placeholder="Beskriv evenemanget..." cols="30" rows="10"></textarea>
-        <input type="button" value="Skapa" @click="$store.dispatch('postEvent')">
+        <CreateEvent></CreateEvent>
       </div>
       <div v-if="$store.state.events.length > 0">
         <div :key="index" v-for="(event, index) in $store.state.events">
@@ -45,6 +42,7 @@
 
 <script>
 import {computed} from '../scripts/computed.js'
+import CreateEvent from '../components/CreateEvent.vue'
 
 export default {
   beforeCreate() {
@@ -52,9 +50,12 @@ export default {
   },
   name: 'EventView',
   computed: computed,
+  components: {
+    CreateEvent
+  },
   methods: {
     selectEvent(newIndex) {
-      this.$store.state.eventIndex = newIndex
+      this.$store.commit('setEventIndex', newIndex)
     }
   }
 }
