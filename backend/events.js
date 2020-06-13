@@ -1,4 +1,4 @@
-module.exports = function (app, database) {
+module.exports = function (app, database, authenticate) {
 
     app.get('/events', (request, response) => {
         database.all('SELECT * FROM events')
@@ -35,12 +35,12 @@ module.exports = function (app, database) {
                         JSON.stringify(request.body.eventGoers),
                         user
                     ]).then(() => {
-                        response.status(201).send(request.body)
+                        response.status(201).send(JSON.stringify({ message: 'Event created', status: 1 }))
                     }).catch(error => {
                         response.send(error)
                     })
                 } else {
-                    response.send('Unauthorized')
+                    response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
                 }
             })
     })
@@ -61,7 +61,7 @@ module.exports = function (app, database) {
                         JSON.stringify(updatedEvent.eventGoers),
                         request.params.event
                     ]).then(() => {
-                        response.send(updatedEvent)
+                        response.send(JSON.stringify({ message: 'Event updated', status: 1}))
                     })
             })
     })
@@ -72,25 +72,4 @@ module.exports = function (app, database) {
                 response.send('Event deleted')
             })
     })
-
-    function authenticate(token) {
-
-        return new Promise((resolve, reject) => {
-            if (token) {
-
-                database.all('SELECT * FROM sessions WHERE sessionToken=?', [token])
-                    .then((sessions) => {
-                        if (!sessions[0]) {
-                            resolve(-1)
-                        } else {
-                            resolve(sessions[0].sessionUserId)
-                        }
-                    })
-
-            } else {
-    
-                resolve(-1)
-            }
-        })
-    }
 }

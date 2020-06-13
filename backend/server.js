@@ -18,11 +18,31 @@ const users = require('./users.js')
 
 let database
 
+const authenticate = function (token) {
+    return new Promise((resolve, reject) => {
+        if (token) {
+
+            database.all('SELECT * FROM sessions WHERE sessionToken=?', [token])
+                .then((sessions) => {
+                    if (!sessions[0]) {
+                        resolve(-1)
+                    } else {
+                        resolve(sessions[0].sessionUserId)
+                    }
+                })
+
+        } else {
+
+            resolve(-1)
+        }
+    })
+}
+
 sqlite.open({ driver: sqlite3.Database, filename: 'database.sqlite'})
     .then((database_) => {
         database = database_
 
-        events(app, database)
-        users(app, database, { v4: uuidv4 })
+        events(app, database, authenticate)
+        users(app, database, { v4: uuidv4 }, authenticate)
     })
 
