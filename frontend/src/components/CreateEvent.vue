@@ -8,18 +8,14 @@
 </template>
 
 <script>
-
 export default {
-  name: "CreateEvent"
+  name: 'CreateEvent'
 }
-
 </script>
 
 <style scoped>
-
 div {
   display: flex;
   flex-direction: column;
 }
-
 </style>

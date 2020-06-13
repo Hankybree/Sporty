@@ -12,8 +12,7 @@ export const actions = {
             body: JSON.stringify({
                 eventSport: document.querySelector('#post-sport').value,
                 eventTitle: document.querySelector('#post-title').value,
-                eventDescription: document.querySelector('#post-description').value,
-                eventGoers: ["my-username(placeholder)"]
+                eventDescription: document.querySelector('#post-description').value
             }),
             headers: {
                 'Content-Type': 'application/json'

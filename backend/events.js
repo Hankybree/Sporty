@@ -27,18 +27,21 @@ module.exports = function (app, database, authenticate) {
         authenticate(request.get('Token'))
             .then((user) => {
                 if (user !== -1) {
-                    database.run('INSERT INTO events (eventSport, eventTitle, eventDescription, eventGoers, eventUser) VALUES (?, ?, ?, ?, ?)',
-                    [
-                        request.body.eventSport,
-                        request.body.eventTitle,
-                        request.body.eventDescription,
-                        JSON.stringify(request.body.eventGoers),
-                        user
-                    ]).then(() => {
-                        response.status(201).send(JSON.stringify({ message: 'Event created', status: 1 }))
-                    }).catch(error => {
-                        response.send(error)
-                    })
+                    database.all('SELECT * FROM users WHERE userId=?', [user])
+                        .then((users) => {
+                            database.run('INSERT INTO events (eventSport, eventTitle, eventDescription, eventGoers, eventUser) VALUES (?, ?, ?, ?, ?)',
+                                [
+                                    request.body.eventSport,
+                                    request.body.eventTitle,
+                                    request.body.eventDescription,
+                                    JSON.stringify([users[0].userName]),
+                                    user
+                                ]).then(() => {
+                                    response.status(201).send(JSON.stringify({ message: 'Event created', status: 1 }))
+                                }).catch(error => {
+                                    response.send(error)
+                                })
+                        })
                 } else {
                     response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
                 }
@@ -61,7 +64,7 @@ module.exports = function (app, database, authenticate) {
                         JSON.stringify(updatedEvent.eventGoers),
                         request.params.event
                     ]).then(() => {
-                        response.send(JSON.stringify({ message: 'Event updated', status: 1}))
+                        response.send(JSON.stringify({ message: 'Event updated', status: 1 }))
                     })
             })
     })

@@ -15,7 +15,7 @@ Vue.use(Vuex)
 const router = new VueRouter({
   routes: [
     { component: HomeView, path: '/'},
-    { component: ProfileView, path: '/profil/:anvandare' },
+    { component: ProfileView, path: '/profil' },
     { component: EventView, path: '/evenemang' }
   ]
 })

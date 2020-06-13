@@ -4,7 +4,7 @@
       <img src="./assets/logo.png" alt="Logo" height="128" width="128">
       <nav id="links">
         <router-link to="/">Hem</router-link>
-        <router-link to="/profil/:anvandare">Profil</router-link>
+        <router-link to="/profil">Profil</router-link>
         <router-link to="/evenemang">Evenemang</router-link>
       </nav>
     </header>
