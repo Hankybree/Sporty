@@ -34,7 +34,8 @@ export const actions = {
                 eventDescription: document.querySelector('#patch-description').value,
             }),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Token': localStorage.getItem('token')
             },
             method: 'PATCH'
         }).then(response => response.json())
@@ -46,6 +47,9 @@ export const actions = {
     },
     deleteEvent(context) {
         fetch('http://localhost:3500/events/' + context.state.events[context.state.eventIndex].eventId, {
+            headers: {
+                'Token': localStorage.getItem('token')
+            },
             method: 'DELETE'
         }).then(response => response.json())
             .then(result => {

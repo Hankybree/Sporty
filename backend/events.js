@@ -49,30 +49,45 @@ module.exports = function (app, database, authenticate) {
     })
 
     app.patch('/events/:event', (request, response) => {
-        database.all('SELECT * FROM events WHERE eventId=?', [request.params.event])
-            .then((events) => {
+        authenticate(request.get('Token'))
+            .then((user) => {
+                if (user !== -1) {
+                    database.all('SELECT * FROM events WHERE eventId=?', [request.params.event])
+                        .then((events) => {
 
-                events[0].eventGoers = JSON.parse(events[0].eventGoers)
+                            events[0].eventGoers = JSON.parse(events[0].eventGoers)
 
-                let updatedEvent = Object.assign(events[0], request.body)
+                            let updatedEvent = Object.assign(events[0], request.body)
 
-                database.run('UPDATE events SET eventSport=?, eventTitle=?, eventDescription=?, eventGoers=? WHERE eventId=?',
-                    [
-                        updatedEvent.eventSport,
-                        updatedEvent.eventTitle,
-                        updatedEvent.eventDescription,
-                        JSON.stringify(updatedEvent.eventGoers),
-                        request.params.event
-                    ]).then(() => {
-                        response.send(JSON.stringify({ message: 'Event updated', status: 1 }))
-                    })
+                            database.run('UPDATE events SET eventSport=?, eventTitle=?, eventDescription=?, eventGoers=? WHERE eventId=?',
+                                [
+                                    updatedEvent.eventSport,
+                                    updatedEvent.eventTitle,
+                                    updatedEvent.eventDescription,
+                                    JSON.stringify(updatedEvent.eventGoers),
+                                    request.params.event
+                                ]).then(() => {
+                                    response.send(JSON.stringify({ message: 'Event updated', status: 1 }))
+                                })
+                        })
+                } else {
+                    response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
+                }
             })
     })
 
     app.delete('/events/:event', (request, response) => {
-        database.run('DELETE FROM events WHERE eventId=?', [request.params.event])
-            .then(() => {
-                response.send('Event deleted')
+
+        authenticate(request.get('Token'))
+            .then((user) => {
+                if (user !== -1) {
+                    database.run('DELETE FROM events WHERE eventId=?', [request.params.event])
+                        .then(() => {
+                            response.send(JSON.stringify({ message: 'Event deleted', status: 1 }))
+                        })
+                } else {
+                    response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
+                }
             })
     })
 }
