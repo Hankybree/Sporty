@@ -81,15 +81,21 @@ module.exports = function (app, database, accessToken, authenticate) {
 
         authenticate(request.get('Token'))
             .then((user) => {
+                
                 if (user !== -1) {
                     database.run('DELETE FROM users WHERE userId=?', [user])
-                    .then(() => {
+                        .then(() => {
 
-                        database.run('DELETE FROM sessions WHERE sessionUserId=?', [user])
-                            .then(() => {
-                                response.send(JSON.stringify({ message: 'User deleted', status: 1 }))
-                            })
-                    })
+                            database.run('DELETE FROM events WHERE eventUser=?', [user])
+                                .then(() => {
+
+                                    database.run('DELETE FROM sessions WHERE sessionUserId=?', [user])
+                                        .then(() => {
+
+                                            response.send(JSON.stringify({ message: 'User deleted', status: 1 }))
+                                        })
+                                })
+                        })
                 } else {
                     response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
                 }
@@ -101,6 +107,13 @@ module.exports = function (app, database, accessToken, authenticate) {
         database.all('SELECT * FROM sessions')
             .then((sessions) => {
                 response.send(sessions)
+            })
+    })
+
+    app.get('/session', (request, response) => {
+        database.all('SELECT * FROM sessions WHERE sessionToken=?', [request.get('Token')])
+            .then((sessions) => {
+                response.send(sessions[0])
             })
     })
 
