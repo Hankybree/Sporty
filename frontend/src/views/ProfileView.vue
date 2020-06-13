@@ -1,6 +1,8 @@
 <template>
   <div class="content">
-    Profil {{ $route.params.anvandare }}
+    Profile
+
+    <input type="button" value="Delete account" @click="$store.dispatch('deleteAccount')">
   </div>
 </template>
 

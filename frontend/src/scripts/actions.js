@@ -15,15 +15,16 @@ export const actions = {
                 eventDescription: document.querySelector('#post-description').value
             }),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Token': localStorage.getItem('token')
             },
             method: 'POST'
         }).then(response => response.json())
-        .then(result => {
-            console.log(result)
-            context.commit('setPostUI', false)
-            context.dispatch('getEvents')
-        })
+            .then(result => {
+                console.log(result)
+                context.commit('setPostUI', false)
+                context.dispatch('getEvents')
+            })
     },
     patchEvent(context) {
         fetch('http://localhost:3500/events/' + context.state.events[context.state.eventIndex].eventId, {
@@ -37,45 +38,116 @@ export const actions = {
             },
             method: 'PATCH'
         }).then(response => response.json())
-        .then(result => {
-            console.log(result)
-            context.commit('setPatchUI', false)
-            context.dispatch('getEvents')
-        })
+            .then(result => {
+                console.log(result)
+                context.commit('setPatchUI', false)
+                context.dispatch('getEvents')
+            })
     },
     deleteEvent(context) {
         fetch('http://localhost:3500/events/' + context.state.events[context.state.eventIndex].eventId, {
             method: 'DELETE'
-        }).then(response => response)
-        .then(result => {
-            console.log(result)
-            context.dispatch('getEvents')
-        })
+        }).then(response => response.json())
+            .then(result => {
+                console.log(result)
+                context.dispatch('getEvents')
+            })
     },
     openPostUI(context) {
-        if(!context.state.showPostUI) {
+        if (!context.state.showPostUI) {
             context.commit('setPostUI', true)
         } else {
             context.commit('setPostUI', false)
         }
     },
     openPatchUI(context) {
-        if(!context.state.showPatchUI) {
+        if (!context.state.showPatchUI) {
             context.commit('setPatchUI', true)
         } else {
             context.commit('setPatchUI', false)
         }
     },
+    getSession(context) {
+        fetch('http://localhost:3500/session', {
+            headers: {
+                'Token': localStorage.getItem('token')
+            }
+        }).then(response => response.json())
+            .then(result => {
+                context.commit('setActiveUser', result.sessionUserId)
+                context.commit('setLoggedIn', true)
+            })
+    },
     signup() {
-        
+        if (document.querySelector('#signup-password').value === document.querySelector('#confirm-password').value) {
+            fetch('http://localhost:3500/signup', {
+                body: JSON.stringify({
+                    userName: document.querySelector('#signup-name').value,
+                    userPassword: document.querySelector('#signup-password').value,
+                    userMail: document.querySelector('#signup-mail').value
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST'
+            }).then(response => response.json())
+                .then(result => {
+                    if (result.status === 1) {
+                        window.location.replace('/')
+                    } else {
+                        alert(result.message)
+                    }
+                })
+        } else {
+            alert('Password confirmation failed')
+        }
     },
-    login() {
-
+    login(context) {
+        fetch('http://localhost:3500/login', {
+            body: JSON.stringify({
+                userName: document.querySelector('#login-name').value,
+                userPassword: document.querySelector('#login-password').value
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST'
+        }).then(response => response.json())
+            .then(result => {
+                if (result.status === 1) {
+                    localStorage.setItem('token', result.token)
+                    context.commit('setActiveUser', result.user)
+                    context.commit('setLoggedIn', true)
+                } else {
+                    alert(result.message)
+                }
+            })
     },
-    logout() {
-
+    logout(context) {
+        fetch('http://localhost:3500/logout', {
+            headers: {
+                'Token': localStorage.getItem('token')
+            },
+            method: 'DELETE'
+        }).then(response => response.json())
+            .then(result => {
+                localStorage.removeItem('token')
+                context.commit('setActiveUser', -1)
+                context.commit('setLoggedIn', false)
+                alert(result.message)
+            })
     },
-    deleteAccount() {
-
+    deleteAccount(context) {
+        fetch('http://localhost:3500/users', {
+            headers: {
+                'Token': localStorage.getItem('token')
+            },
+            method: 'DELETE'
+        }).then(response => response.json())
+        .then(result => {
+            context.commit('setActiveUser', -1)
+            context.commit('setLoggedIn', false)
+            alert(result.message)
+        })
     }
 }

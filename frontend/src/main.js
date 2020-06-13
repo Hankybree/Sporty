@@ -6,6 +6,7 @@ import App from './App.vue'
 import HomeView from './views/HomeView.vue'
 import ProfileView from './views/ProfileView.vue'
 import EventView from './views/EventView.vue'
+import SignUpView from './views/SignUpView.vue'
 
 import {actions} from './scripts/actions.js'
 
@@ -15,8 +16,9 @@ Vue.use(Vuex)
 const router = new VueRouter({
   routes: [
     { component: HomeView, path: '/'},
-    { component: ProfileView, path: '/profil' },
-    { component: EventView, path: '/evenemang' }
+    { component: ProfileView, path: '/profile' },
+    { component: EventView, path: '/events' },
+    { component: SignUpView, path: '/signup' }
   ]
 })
 
@@ -25,9 +27,9 @@ const store = new Vuex.Store({
   state: {
     events: [
       {
-        eventSport: "",
-        eventTitle: "",
-        eventDescription: "",
+        eventSport: '',
+        eventTitle: '',
+        eventDescription: '',
         eventGoers: [],
         eventUser: 1
       }
@@ -35,7 +37,8 @@ const store = new Vuex.Store({
     eventIndex: 0,
     showPostUI: false,
     showPatchUI: false,
-    activeUser: -1
+    activeUser: -1,
+    loggedIn: false
   },
   mutations: {
     setEvents(state, newEvents) {
@@ -52,6 +55,9 @@ const store = new Vuex.Store({
     },
     setActiveUser(state, newActiveUser) {
       state.activeUser = newActiveUser
+    },
+    setLoggedIn(state, newLoggedIn) {
+      state.loggedIn = newLoggedIn
     }
   }
 })

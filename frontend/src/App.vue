@@ -3,19 +3,37 @@
     <header>
       <img src="./assets/logo.png" alt="Logo" height="128" width="128">
       <nav id="links">
-        <router-link to="/">Hem</router-link>
-        <router-link to="/profil">Profil</router-link>
-        <router-link to="/evenemang">Evenemang</router-link>
+        <router-link to="/">Home</router-link>
+        <router-link to="/profile">Profile</router-link>
+        <router-link to="/events">Events</router-link>
       </nav>
+      <div id="login-ui">
+        <div v-if="!$store.state.loggedIn">
+          <LogIn></LogIn>
+          <router-link to="/signup">Got no account? Sign up here!</router-link>
+        </div>
+        <div v-else>
+          <input value="Log out" type="button" @click="$store.dispatch('logout')">
+        </div>
+      </div>
     </header>
     <router-view id="view"></router-view>
   </div>
 </template>
 
 <script>
+import LogIn from './components/LogIn.vue'
 
 export default {
-  name: 'App'
+  created() {
+    if (localStorage.getItem('token') !== null) {
+      this.$store.dispatch('getSession')
+    }
+  },
+  name: 'App',
+  components: {
+    LogIn
+  }
 }
 </script>
 
@@ -44,6 +62,9 @@ header {
   margin-right: 20px;
   text-decoration: none;
   color: white;
+}
+#login-ui {
+  float: right;
 }
 #view {
   min-height: 80vh;
