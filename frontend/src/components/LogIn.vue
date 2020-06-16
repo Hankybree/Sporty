@@ -11,9 +11,8 @@
 </template>
 
 <script>
-
 export default {
-  name: 'LogIn'
+  name: "LogIn"
 }
 </script>
 

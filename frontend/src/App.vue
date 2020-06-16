@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <img src="./assets/logo.png" alt="Logo" height="128" width="128">
+      <img src="./assets/football_002.jpg" alt="Logo" height="128" width="128" />
       <nav id="links">
         <router-link to="/">Home</router-link>
         <router-link to="/events">Events</router-link>
@@ -26,11 +26,11 @@ import LogOut from './components/LogOut.vue'
 
 export default {
   created() {
-    if (localStorage.getItem('token') !== null) {
-      this.$store.dispatch('getSession')
+    if (localStorage.getItem("token") !== null) {
+      this.$store.dispatch("getSession");
     }
   },
-  name: 'App',
+  name: "App",
   components: {
     LogIn,
     LogOut
@@ -39,7 +39,8 @@ export default {
 </script>
 
 <style>
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
 }
@@ -52,17 +53,22 @@ body, html {
 }
 header {
   display: flex;
-  background-color: green;
-  height: 20vh;
+  background-color: white;
+  height: 15vh;
+}
+#app > header > img {
+  object-fit: cover;
+  height: 100%;
 }
 #links {
   display: flex;
   padding: 20px;
+  align-items: flex-end;
 }
 a {
   margin-right: 20px;
   text-decoration: none;
-  color: white;
+  color: grey;
 }
 #login-ui {
   float: right;
