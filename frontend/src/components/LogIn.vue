@@ -1,14 +1,12 @@
 <template>
-  
+  <div></div>
 </template>
 
 <script>
-
 export default {
-  name: 'LogIn'
-}
+  name: "LogIn"
+};
 </script>
 
 <style scoped>
-
 </style>
