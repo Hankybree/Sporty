@@ -1,5 +1,11 @@
 <template>
-  <div></div>
+  <div>
+    <div>
+      <input id="login-name" type="text" placeholder="Username..." />
+      <input id="login-password" type="password" placeholder="Password..." />
+      <input value="Log in" type="button" @click="$store.dispatch('login')" />
+    </div>
+  </div>
 </template>
 
 <script>
