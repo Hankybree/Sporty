@@ -26,11 +26,11 @@ import LogOut from './components/LogOut.vue'
 
 export default {
   created() {
-    if (localStorage.getItem("token") !== null) {
-      this.$store.dispatch("getSession");
+    if (localStorage.getItem('token') !== null) {
+      this.$store.dispatch('getSession')
     }
   },
-  name: "App",
+  name: 'App',
   components: {
     LogIn,
     LogOut

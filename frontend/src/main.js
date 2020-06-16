@@ -39,6 +39,7 @@ const store = new Vuex.Store({
     showPostUI: false,
     showPatchUI: false,
     activeUser: -1,
+    userName: '',
     loggedIn: false
   },
   mutations: {
@@ -59,6 +60,9 @@ const store = new Vuex.Store({
     },
     setLoggedIn(state, newLoggedIn) {
       state.loggedIn = newLoggedIn
+    },
+    setUserName(state, newUserName) {
+      state.userName = newUserName
     }
   }
 })

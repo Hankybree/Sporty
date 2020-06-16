@@ -78,7 +78,8 @@ export const actions = {
             }
         }).then(response => response.json())
             .then(result => {
-                context.commit('setActiveUser', result.sessionUserId)
+                context.commit('setActiveUser', result.userId)
+                context.commit('setUserName', result.userName)
                 context.commit('setLoggedIn', true)
             })
     },
@@ -120,7 +121,8 @@ export const actions = {
             .then(result => {
                 if (result.status === 1) {
                     localStorage.setItem('token', result.token)
-                    context.commit('setActiveUser', result.user)
+                    context.commit('setActiveUser', result.userId)
+                    context.commit('setUserName', result.userName)
                     context.commit('setLoggedIn', true)
                 } else {
                     alert(result.message)

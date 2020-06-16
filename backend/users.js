@@ -45,13 +45,14 @@ module.exports = function (app, database, accessToken, authenticate) {
 
                                 const token = accessToken.v4()
                                 const userId = users[0].userId
+                                const userName = users[0].userName
 
                                 database.run('INSERT INTO sessions (sessionUserId, sessionToken) VALUES (?, ?)',
                                     [
                                         userId,
                                         token
                                     ]).then(() => {
-                                        response.send(JSON.stringify({ message: 'Logged in', status: 1, token: token, user: userId }))
+                                        response.send(JSON.stringify({ message: 'Logged in', status: 1, token: token, userId: userId, userName: userName }))
                                     })
                             } else {
                                 response.send(JSON.stringify({ message: 'Already logged in', status: 3 }))
@@ -111,9 +112,14 @@ module.exports = function (app, database, accessToken, authenticate) {
     })
 
     app.get('/session', (request, response) => {
+
         database.all('SELECT * FROM sessions WHERE sessionToken=?', [request.get('Token')])
             .then((sessions) => {
-                response.send(sessions[0])
+
+                database.run('SELECT * FROM users WHERE userId=?', [sessions[0].sessionUserId])
+                    .then((users) => {
+                        response.send({ userId: sessions[0].sessionUserId, userName: users[0].userName })
+                    })
             })
     })
 
