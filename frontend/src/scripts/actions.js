@@ -138,6 +138,7 @@ export const actions = {
                 localStorage.removeItem('token')
                 context.commit('setActiveUser', -1)
                 context.commit('setLoggedIn', false)
+                window.location.replace('/')
                 alert(result.message)
             })
     },
@@ -149,8 +150,10 @@ export const actions = {
             method: 'DELETE'
         }).then(response => response.json())
         .then(result => {
+            localStorage.removeItem('token')
             context.commit('setActiveUser', -1)
             context.commit('setLoggedIn', false)
+            window.location.replace('/')
             alert(result.message)
         })
     }

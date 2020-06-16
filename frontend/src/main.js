@@ -31,7 +31,8 @@ const store = new Vuex.Store({
         eventTitle: '',
         eventDescription: '',
         eventGoers: [],
-        eventUser: 1
+        eventUser: 1,
+        eventUserName: ''
       }
     ],
     eventIndex: 0,

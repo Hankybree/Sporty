@@ -4,7 +4,6 @@
       <img src="./assets/logo.png" alt="Logo" height="128" width="128">
       <nav id="links">
         <router-link to="/">Home</router-link>
-        <router-link to="/profile">Profile</router-link>
         <router-link to="/events">Events</router-link>
       </nav>
       <div id="login-ui">
@@ -13,7 +12,7 @@
           <router-link to="/signup">Got no account? Sign up here!</router-link>
         </div>
         <div v-else>
-          <input value="Log out" type="button" @click="$store.dispatch('logout')">
+          <LogOut></LogOut>
         </div>
       </div>
     </header>
@@ -23,6 +22,7 @@
 
 <script>
 import LogIn from './components/LogIn.vue'
+import LogOut from './components/LogOut.vue'
 
 export default {
   created() {
@@ -32,7 +32,8 @@ export default {
   },
   name: 'App',
   components: {
-    LogIn
+    LogIn,
+    LogOut
   }
 }
 </script>
@@ -58,7 +59,7 @@ header {
   display: flex;
   padding: 20px;
 }
-#links > a {
+a {
   margin-right: 20px;
   text-decoration: none;
   color: white;

@@ -86,7 +86,7 @@ module.exports = function (app, database, accessToken, authenticate) {
                     database.run('DELETE FROM users WHERE userId=?', [user])
                         .then(() => {
 
-                            database.run('DELETE FROM events WHERE eventUser=?', [user])
+                            database.run('DELETE FROM events WHERE eventUserId=?', [user])
                                 .then(() => {
 
                                     database.run('DELETE FROM sessions WHERE sessionUserId=?', [user])
