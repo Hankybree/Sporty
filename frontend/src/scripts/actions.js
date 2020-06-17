@@ -78,7 +78,8 @@ export const actions = {
             }
         }).then(response => response.json())
             .then(result => {
-                context.commit('setActiveUser', result.sessionUserId)
+                context.commit('setActiveUser', result.userId)
+                context.commit('setUserName', result.userName)
                 context.commit('setLoggedIn', true)
             })
     },
@@ -120,7 +121,8 @@ export const actions = {
             .then(result => {
                 if (result.status === 1) {
                     localStorage.setItem('token', result.token)
-                    context.commit('setActiveUser', result.user)
+                    context.commit('setActiveUser', result.userId)
+                    context.commit('setUserName', result.userName)
                     context.commit('setLoggedIn', true)
                 } else {
                     alert(result.message)
@@ -138,6 +140,7 @@ export const actions = {
                 localStorage.removeItem('token')
                 context.commit('setActiveUser', -1)
                 context.commit('setLoggedIn', false)
+                window.location.replace('/')
                 alert(result.message)
             })
     },
@@ -149,8 +152,10 @@ export const actions = {
             method: 'DELETE'
         }).then(response => response.json())
         .then(result => {
+            localStorage.removeItem('token')
             context.commit('setActiveUser', -1)
             context.commit('setLoggedIn', false)
+            window.location.replace('/')
             alert(result.message)
         })
     }

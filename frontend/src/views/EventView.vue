@@ -2,10 +2,12 @@
   <div class="content">
     <div id="ui">
       <h1>Events</h1>
-      <input type="button" value="Skapa nytt evenemang" @click="$store.dispatch('openPostUI')" />
 
-      <div id="post-ui" v-if="$store.state.showPostUI">
-        <CreateEvent></CreateEvent>
+      <div v-if="$store.state.loggedIn">
+        <input type="button" value="Create new event" @click="$store.dispatch('openPostUI')">
+        <div id="post-ui" v-if="$store.state.showPostUI">
+          <CreateEvent></CreateEvent>
+        </div>
       </div>
 
       <div v-if="$store.state.events.length > 0">
@@ -31,9 +33,7 @@
           id="type"
         >This is an event of type: {{ $store.state.events[$store.state.eventIndex].eventSport }}</div>
         <div id="description">{{ $store.state.events[$store.state.eventIndex].eventDescription }}</div>
-        <div
-          id="created-by"
-        >Created by: {{ $store.state.events[$store.state.eventIndex].eventUser }}</div>
+        <div id="created-by">Created by: {{ $store.state.events[$store.state.eventIndex].eventUserName }}</div>
 
         <div v-if="$store.state.activeUser === $store.state.events[eventIndex].eventUser">
           <input type="button" value="Edit" @click="$store.dispatch('openPatchUI')" />
@@ -51,9 +51,9 @@
 </template>
 
 <script>
-import { computed } from "../scripts/computed.js";
-import CreateEvent from "../components/CreateEvent.vue";
-import UpdateEvent from "../components/UpdateEvent.vue";
+import { computed } from '../scripts/computed.js'
+import CreateEvent from '../components/CreateEvent.vue'
+import UpdateEvent from '../components/UpdateEvent.vue'
 
 export default {
   beforeCreate() {
@@ -70,7 +70,7 @@ export default {
       this.$store.commit("setEventIndex", newIndex);
     }
   }
-};
+}
 </script>
 
 <style scoped>

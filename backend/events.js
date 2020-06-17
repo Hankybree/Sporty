@@ -29,13 +29,14 @@ module.exports = function (app, database, authenticate) {
                 if (user !== -1) {
                     database.all('SELECT * FROM users WHERE userId=?', [user])
                         .then((users) => {
-                            database.run('INSERT INTO events (eventSport, eventTitle, eventDescription, eventGoers, eventUser) VALUES (?, ?, ?, ?, ?)',
+                            database.run('INSERT INTO events (eventSport, eventTitle, eventDescription, eventGoers, eventUserId, eventUserName) VALUES (?, ?, ?, ?, ?, ?)',
                                 [
                                     request.body.eventSport,
                                     request.body.eventTitle,
                                     request.body.eventDescription,
                                     JSON.stringify([users[0].userName]),
-                                    user
+                                    user,
+                                    users[0].userName
                                 ]).then(() => {
                                     response.status(201).send(JSON.stringify({ message: 'Event created', status: 1 }))
                                 }).catch(error => {

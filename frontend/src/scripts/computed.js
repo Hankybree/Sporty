@@ -4,7 +4,7 @@ export const computed = {
             return this.$store.state.eventIndex
         },
         set(newIndex) {
-            this.state.commit('setEventIndex', newIndex)
+            this.$store.commit('setEventIndex', newIndex)
         }
     }
 }

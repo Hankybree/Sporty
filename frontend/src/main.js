@@ -31,13 +31,15 @@ const store = new Vuex.Store({
         eventTitle: '',
         eventDescription: '',
         eventGoers: [],
-        eventUser: 1
+        eventUser: 1,
+        eventUserName: ''
       }
     ],
     eventIndex: 0,
     showPostUI: false,
     showPatchUI: false,
     activeUser: -1,
+    userName: '',
     loggedIn: false
   },
   mutations: {
@@ -58,6 +60,9 @@ const store = new Vuex.Store({
     },
     setLoggedIn(state, newLoggedIn) {
       state.loggedIn = newLoggedIn
+    },
+    setUserName(state, newUserName) {
+      state.userName = newUserName
     }
   }
 })

@@ -4,7 +4,6 @@
       <img src="./assets/Logo.png" alt="Logo" />
       <nav id="links">
         <router-link to="/">Home</router-link>
-        <router-link to="/profile">Profile</router-link>
         <router-link to="/events">Events</router-link>
       </nav>
       <div id="login-ui">
@@ -13,7 +12,7 @@
           <router-link to="/signup">Got no account? Sign up here!</router-link>
         </div>
         <div v-else>
-          <input value="Log out" type="button" @click="$store.dispatch('logout')" />
+          <LogOut></LogOut>
         </div>
       </div>
     </header>
@@ -22,19 +21,21 @@
 </template>
 
 <script>
-import LogIn from "./components/LogIn.vue";
+import LogIn from './components/LogIn.vue'
+import LogOut from './components/LogOut.vue'
 
 export default {
   created() {
-    if (localStorage.getItem("token") !== null) {
-      this.$store.dispatch("getSession");
+    if (localStorage.getItem('token') !== null) {
+      this.$store.dispatch('getSession')
     }
   },
-  name: "App",
+  name: 'App',
   components: {
-    LogIn
+    LogIn,
+    LogOut
   }
-};
+}
 </script>
 
 <style>
@@ -78,7 +79,7 @@ header > img {
   padding: 20px;
   align-items: flex-end;
 }
-#links > a {
+a {
   margin-right: 20px;
   text-decoration: none;
   color: grey;
