@@ -33,7 +33,7 @@
               <input type="button" value="Attend event" @click="$store.dispatch('attendEvent')">
             </div>
             <div v-else>
-              <input type="button" value="Stop attending event">
+              <input type="button" value="Stop attending event" @click="$store.dispatch('attendEvent')">
             </div>
           </div>
         </div>
