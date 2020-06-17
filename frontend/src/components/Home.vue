@@ -1,7 +1,9 @@
 <template>
   <div id="frame">
-    <input type="button" value="Skapa event" />
-    <input type="button" value="Se event" />
+    <!-- <input type="button" value="Skapa event" />
+    <input type="button" value="Se event" />-->
+    <router-link to="/" tag="button">Home</router-link>
+    <router-link to="/events" tag="button">Events</router-link>
   </div>
 </template>
 
@@ -19,7 +21,7 @@ export default {
   height: 100vh;
   background-color: tomato;
 }
-#frame > input {
+#frame > button {
   position: relative;
   background-color: tomato;
   border: solid 2px;

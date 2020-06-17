@@ -63,7 +63,7 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: rgba(61, 243, 6, 0.8);
+  background-color: dimgray;
 
   height: 10vh;
   width: 100vw;
@@ -81,7 +81,7 @@ header > img {
 a {
   margin-right: 20px;
   text-decoration: none;
-  color: grey;
+  color: black;
 }
 #login-ui {
   align-self: flex-end;

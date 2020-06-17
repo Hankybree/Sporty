@@ -8,14 +8,17 @@ import ProfileView from './views/ProfileView.vue'
 import EventView from './views/EventView.vue'
 import SignUpView from './views/SignUpView.vue'
 
-import {actions} from './scripts/actions.js'
+import { actions } from './scripts/actions.js'
+
+import VideoBg from "vue-videobg";
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
+Vue.component("video-bg", VideoBg);
 
 const router = new VueRouter({
   routes: [
-    { component: HomeView, path: '/'},
+    { component: HomeView, path: '/' },
     { component: ProfileView, path: '/profile' },
     { component: EventView, path: '/events' },
     { component: SignUpView, path: '/signup' }
@@ -72,5 +75,7 @@ Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
   router,
-  store
+  store,
+  VideoBg
+
 }).$mount('#app')

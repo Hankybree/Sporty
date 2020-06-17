@@ -1,10 +1,6 @@
 <template>
   <div class="wrapper">
     <img src="../assets/Logo.png" alt />
-    <div>
-      <h3>Titel</h3>
-      <h4>Sport</h4>
-    </div>
   </div>
 </template>
 
@@ -33,10 +29,7 @@ h3 {
   margin: 5px;
   color: black;
 }
-#event-info {
-  display: flex;
-  flex-direction: column;
-}
+
 h4 {
   margin: 5px;
   padding-top: 5px;
