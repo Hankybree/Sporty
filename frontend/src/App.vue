@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <img src="./assets/football_002.jpg" alt="Logo" height="128" width="128" />
+      <img src="./assets/Logo.png" alt="Logo" />
       <nav id="links">
         <router-link to="/">Home</router-link>
         <router-link to="/profile">Profile</router-link>
@@ -17,7 +17,7 @@
         </div>
       </div>
     </header>
-    <router-view id="view"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -50,14 +50,28 @@ html {
   text-align: center;
   color: #2c3e50;
 }
-header {
-  display: flex;
-  background-color: white;
-  height: 15vh;
+.wrapper {
+  height: 300px;
+  width: 40%;
+  display: inline-block;
+  overflow: auto;
+  position: relative;
+  background-color: red;
 }
-#app > header > img {
-  object-fit: cover;
-  height: 100%;
+header {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: rgba(61, 243, 6, 0.8);
+
+  height: 10vh;
+  width: 100vw;
+}
+header > img {
+  object-fit: contain;
+  padding: 5px;
+  margin: 5px;
 }
 #links {
   display: flex;
@@ -70,9 +84,12 @@ header {
   color: grey;
 }
 #login-ui {
-  float: right;
+  align-self: flex-end;
 }
 #view {
   min-height: 80vh;
+}
+#relative {
+  position: relative;
 }
 </style>
