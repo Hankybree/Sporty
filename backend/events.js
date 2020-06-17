@@ -50,8 +50,10 @@ module.exports = function (app, database, authenticate) {
     })
 
     app.patch('/events/:event', (request, response) => {
+
         authenticate(request.get('Token'))
             .then((user) => {
+
                 if (user !== -1) {
                     database.all('SELECT * FROM events WHERE eventId=?', [request.params.event])
                         .then((events) => {
@@ -75,6 +77,28 @@ module.exports = function (app, database, authenticate) {
                     response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
                 }
             })
+    })
+
+    app.patch('/attend/:event', (request, response) => {
+
+        database.all('SELECT * FROM events WHERE eventId=?', [request.params.event])
+                        .then((events) => {
+
+                            events[0].eventGoers = JSON.parse(events[0].eventGoers)
+
+                            let updatedEvent = Object.assign(events[0], request.body)
+
+                            database.run('UPDATE events SET eventSport=?, eventTitle=?, eventDescription=?, eventGoers=? WHERE eventId=?',
+                                [
+                                    updatedEvent.eventSport,
+                                    updatedEvent.eventTitle,
+                                    updatedEvent.eventDescription,
+                                    JSON.stringify(updatedEvent.eventGoers),
+                                    request.params.event
+                                ]).then(() => {
+                                    response.send(JSON.stringify({ message: 'Attending event', status: 1 }))
+                                })
+                        })
     })
 
     app.delete('/events/:event', (request, response) => {

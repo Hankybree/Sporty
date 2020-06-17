@@ -57,6 +57,28 @@ export const actions = {
                 context.dispatch('getEvents')
             })
     },
+    attendEvent(context) {
+
+        let attendees = context.state.events[context.state.eventIndex].eventGoers
+        attendees.push(context.state.userName)
+
+        fetch('http://localhost:3500/attend/' + context.state.events[context.state.eventIndex].eventId, {
+            body: JSON.stringify({
+                eventGoers: attendees
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PATCH'
+        }).then(response => response.json())
+            .then(result => {
+                console.log(result)
+                context.dispatch('getEvents')
+            })
+    },
+    unAttendEvent(context) {
+
+    },
     openPostUI(context) {
         if (!context.state.showPostUI) {
             context.commit('setPostUI', true)

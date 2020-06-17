@@ -116,7 +116,7 @@ module.exports = function (app, database, accessToken, authenticate) {
         database.all('SELECT * FROM sessions WHERE sessionToken=?', [request.get('Token')])
             .then((sessions) => {
 
-                database.run('SELECT * FROM users WHERE userId=?', [sessions[0].sessionUserId])
+                database.all('SELECT * FROM users WHERE userId=?', [sessions[0].sessionUserId])
                     .then((users) => {
                         response.send({ userId: sessions[0].sessionUserId, userName: users[0].userName })
                     })

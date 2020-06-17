@@ -26,7 +26,16 @@
           <div
             :key="goer"
             v-for="goer in $store.state.events[$store.state.eventIndex].eventGoers"
-          >{{ goer }}</div>
+          >{{ goer }}
+          </div>
+          <div v-if="$store.state.loggedIn">
+            <div v-if="!$store.state.events[$store.state.eventIndex].eventGoers.includes($store.state.userName, 0)">
+              <input type="button" value="Attend event" @click="$store.dispatch('attendEvent')">
+            </div>
+            <div v-else>
+              <input type="button" value="Stop attending event">
+            </div>
+          </div>
         </div>
 
         <div
