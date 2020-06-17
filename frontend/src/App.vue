@@ -21,21 +21,21 @@
 </template>
 
 <script>
-import LogIn from './components/LogIn.vue'
-import LogOut from './components/LogOut.vue'
+import LogIn from "./components/LogIn.vue";
+import LogOut from "./components/LogOut.vue";
 
 export default {
   created() {
-    if (localStorage.getItem('token') !== null) {
-      this.$store.dispatch('getSession')
+    if (localStorage.getItem("token") !== null) {
+      this.$store.dispatch("getSession");
     }
   },
-  name: 'App',
+  name: "App",
   components: {
     LogIn,
     LogOut
   }
-}
+};
 </script>
 
 <style>
@@ -60,7 +60,6 @@ html {
   background-color: red;
 }
 header {
-  position: absolute;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

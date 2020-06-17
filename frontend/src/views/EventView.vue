@@ -1,10 +1,12 @@
 <template>
   <div class="content">
     <div id="ui">
-      <h1>Events</h1>
-
+      <div id="event-list">
+        <h1>Events</h1>
+        <EventCell></EventCell>
+      </div>
       <div v-if="$store.state.loggedIn">
-        <input type="button" value="Create new event" @click="$store.dispatch('openPostUI')">
+        <input type="button" value="Create new event" @click="$store.dispatch('openPostUI')" />
         <div id="post-ui" v-if="$store.state.showPostUI">
           <CreateEvent></CreateEvent>
         </div>
@@ -33,7 +35,9 @@
           id="type"
         >This is an event of type: {{ $store.state.events[$store.state.eventIndex].eventSport }}</div>
         <div id="description">{{ $store.state.events[$store.state.eventIndex].eventDescription }}</div>
-        <div id="created-by">Created by: {{ $store.state.events[$store.state.eventIndex].eventUserName }}</div>
+        <div
+          id="created-by"
+        >Created by: {{ $store.state.events[$store.state.eventIndex].eventUserName }}</div>
 
         <div v-if="$store.state.activeUser === $store.state.events[eventIndex].eventUser">
           <input type="button" value="Edit" @click="$store.dispatch('openPatchUI')" />
@@ -51,9 +55,10 @@
 </template>
 
 <script>
-import { computed } from '../scripts/computed.js'
-import CreateEvent from '../components/CreateEvent.vue'
-import UpdateEvent from '../components/UpdateEvent.vue'
+import { computed } from "../scripts/computed.js";
+import CreateEvent from "../components/CreateEvent.vue";
+import UpdateEvent from "../components/UpdateEvent.vue";
+import EventCell from "../components/EventCell.vue";
 
 export default {
   beforeCreate() {
@@ -63,19 +68,25 @@ export default {
   computed: computed,
   components: {
     CreateEvent,
-    UpdateEvent
+    UpdateEvent,
+    EventCell
   },
   methods: {
     selectEvent(newIndex) {
       this.$store.commit("setEventIndex", newIndex);
     }
   }
-}
+};
 </script>
 
 <style scoped>
 .content {
   display: flex;
+}
+#event-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 #ui {
   background-color: orange;
