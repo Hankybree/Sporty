@@ -2,7 +2,7 @@
   <div id="app">
     <header>
       <img src="./assets/logo.png" alt="logo" />
-      <div>Sporty</div>
+      <div id="header-title">Sporty</div>
       <nav id="links">
         <router-link to="/">Home</router-link>
         <router-link to="/events">Events</router-link>
@@ -63,7 +63,6 @@ html {
 header {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   background-color: dimgray;
 
   height: 10vh;
@@ -73,6 +72,11 @@ header > img {
   object-fit: contain;
   padding: 5px;
   margin: 5px;
+}
+#header-title {
+  margin: auto auto auto 10px;
+  color: black;
+  font-size: 2em;
 }
 #links {
   display: flex;
@@ -86,6 +90,7 @@ a {
 }
 #login-ui {
   align-self: flex-end;
+  margin-right: 20px;
 }
 #view {
   min-height: 80vh;
