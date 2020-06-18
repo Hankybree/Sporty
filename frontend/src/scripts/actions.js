@@ -57,6 +57,30 @@ export const actions = {
                 context.dispatch('getEvents')
             })
     },
+    attendEvent(context) {
+
+        let attendees = context.state.events[context.state.eventIndex].eventGoers
+
+        if (!context.state.events[context.state.eventIndex].eventGoers.includes(context.state.userName, 0)) {
+            attendees.push(context.state.userName)
+        } else {
+            attendees.splice(attendees.indexOf(context.state.userName), 1)
+        }
+
+        fetch('http://localhost:3500/attend/' + context.state.events[context.state.eventIndex].eventId, {
+            body: JSON.stringify({
+                eventGoers: attendees
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PATCH'
+        }).then(response => response.json())
+            .then(result => {
+                console.log(result)
+                context.dispatch('getEvents')
+            })
+    },
     openPostUI(context) {
         if (!context.state.showPostUI) {
             context.commit('setPostUI', true)
@@ -151,12 +175,12 @@ export const actions = {
             },
             method: 'DELETE'
         }).then(response => response.json())
-        .then(result => {
-            localStorage.removeItem('token')
-            context.commit('setActiveUser', -1)
-            context.commit('setLoggedIn', false)
-            window.location.replace('/')
-            alert(result.message)
-        })
+            .then(result => {
+                localStorage.removeItem('token')
+                context.commit('setActiveUser', -1)
+                context.commit('setLoggedIn', false)
+                window.location.replace('/')
+                alert(result.message)
+            })
     }
 }
