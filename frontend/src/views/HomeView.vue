@@ -1,16 +1,19 @@
 <template>
-  <div class="content">
-    Home
+  <div>
+    <Home></Home>
   </div>
 </template>
 
 <script>
+import Home from "../components/Home.vue";
 
 export default {
-  name: 'HomeView'
-}
+  name: "HomeView",
+  components: {
+    Home
+  }
+};
 </script>
 
 <style scoped>
-
 </style>

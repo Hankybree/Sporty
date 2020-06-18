@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <img src="./assets/football_002.jpg" alt="Logo" height="128" width="128" />
+      <img src="./assets/Logo.png" alt="Logo" />
       <nav id="links">
         <router-link to="/">Home</router-link>
         <router-link to="/events">Events</router-link>
@@ -16,26 +16,26 @@
         </div>
       </div>
     </header>
-    <router-view id="view"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import LogIn from './components/LogIn.vue'
-import LogOut from './components/LogOut.vue'
+import LogIn from "./components/LogIn.vue";
+import LogOut from "./components/LogOut.vue";
 
 export default {
   created() {
-    if (localStorage.getItem('token') !== null) {
-      this.$store.dispatch('getSession')
+    if (localStorage.getItem("token") !== null) {
+      this.$store.dispatch("getSession");
     }
   },
-  name: 'App',
+  name: "App",
   components: {
     LogIn,
     LogOut
   }
-}
+};
 </script>
 
 <style>
@@ -51,14 +51,27 @@ html {
   text-align: center;
   color: #2c3e50;
 }
+.wrapper {
+  height: 300px;
+  width: 40%;
+  display: inline-block;
+  overflow: auto;
+  position: relative;
+  background-color: red;
+}
 header {
   display: flex;
-  background-color: white;
-  height: 15vh;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: dimgray;
+
+  height: 10vh;
+  width: 100vw;
 }
-#app > header > img {
-  object-fit: cover;
-  height: 100%;
+header > img {
+  object-fit: contain;
+  padding: 5px;
+  margin: 5px;
 }
 #links {
   display: flex;
@@ -68,12 +81,15 @@ header {
 a {
   margin-right: 20px;
   text-decoration: none;
-  color: grey;
+  color: black;
 }
 #login-ui {
-  float: right;
+  align-self: flex-end;
 }
 #view {
   min-height: 80vh;
+}
+#relative {
+  position: relative;
 }
 </style>

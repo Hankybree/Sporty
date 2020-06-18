@@ -1,18 +1,25 @@
 <template>
   <div class="content">
     <div id="ui">
-      <h1>Events</h1>
+      <div id="event-list">
+        <h1>Events</h1>
 
-      <div v-if="$store.state.loggedIn">
-        <input type="button" value="Create new event" @click="$store.dispatch('openPostUI')">
-        <div id="post-ui" v-if="$store.state.showPostUI">
-          <CreateEvent></CreateEvent>
+        <div v-if="$store.state.loggedIn">
+          <input type="button" value="Create new event" @click="$store.dispatch('openPostUI')" />
+          <div id="post-ui" v-if="$store.state.showPostUI">
+            <CreateEvent></CreateEvent>
+          </div>
         </div>
-      </div>
 
-      <div v-if="$store.state.events.length > 0">
-        <div :key="index" v-for="(event, index) in $store.state.events">
-          <div @click="selectEvent(index)">{{ event.eventTitle }}</div>
+        <div v-if="$store.state.events.length > 0">
+          <div :key="index" v-for="(event, index) in $store.state.events">
+            <div @click="selectEvent(index)" class="wrapper">
+              <img src="../assets/Logo.png" alt />
+              <div id="eventcell-info">
+                <h2>{{ event.eventTitle }}</h2>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -38,11 +45,16 @@
           </div>
         </div>
 
-        <div
-          id="type"
-        >This is an event of type: {{ $store.state.events[$store.state.eventIndex].eventSport }}</div>
+        <div id="type">
+          <p>This is an event of type:</p>
+          {{ $store.state.events[$store.state.eventIndex].eventSport }}
+        </div>
+        <p>Description:</p>
         <div id="description">{{ $store.state.events[$store.state.eventIndex].eventDescription }}</div>
-        <div id="created-by">Created by: {{ $store.state.events[$store.state.eventIndex].eventUserName }}</div>
+        <div id="created-by">
+          <p>Created by:</p>
+          {{ $store.state.events[$store.state.eventIndex].eventUserName }}
+        </div>
 
         <div v-if="$store.state.activeUser === $store.state.events[eventIndex].eventUser">
           <input type="button" value="Edit" @click="$store.dispatch('openPatchUI')" />
@@ -60,9 +72,9 @@
 </template>
 
 <script>
-import { computed } from '../scripts/computed.js'
-import CreateEvent from '../components/CreateEvent.vue'
-import UpdateEvent from '../components/UpdateEvent.vue'
+import { computed } from "../scripts/computed.js";
+import CreateEvent from "../components/CreateEvent.vue";
+import UpdateEvent from "../components/UpdateEvent.vue";
 
 export default {
   beforeCreate() {
@@ -79,12 +91,17 @@ export default {
       this.$store.commit("setEventIndex", newIndex);
     }
   }
-}
+};
 </script>
 
 <style scoped>
 .content {
   display: flex;
+}
+#event-list {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 #ui {
   background-color: orange;
@@ -93,7 +110,7 @@ export default {
   width: 25vw;
 }
 #event {
-  background-color: yellow;
+  background-color: tomato;
   flex-grow: 1;
   text-align: center;
 }
@@ -111,5 +128,35 @@ export default {
 #patch-ui {
   display: flex;
   flex-direction: column;
+}
+.wrapper {
+  display: flex;
+  height: 13vh;
+  width: 20vw;
+  border: solid 2px black;
+  border-radius: 5px;
+  background-color: blanchedalmond;
+  overflow: hidden;
+  margin: 10px;
+}
+.wrapper > img {
+  border: solid 2px black;
+  max-width: 4vw;
+  background-color: purple;
+}
+#eventcell-info {
+  display: flex;
+  flex-direction: column;
+}
+h2 {
+  color: black;
+  margin: 5px;
+}
+h1 {
+  color: black;
+  margin: 5px;
+}
+p {
+  color: black;
 }
 </style>
