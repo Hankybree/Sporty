@@ -2,7 +2,8 @@
   <div id="frame">
     <!-- <input type="button" value="Skapa event" />
     <input type="button" value="Se event" />-->
-    <router-link to="/" tag="button">Home</router-link>
+    <!-- <router-link to="/" tag="button">Home</router-link> -->
+    <h1>Sporty</h1>
     <router-link to="/events" tag="button">Events</router-link>
   </div>
 </template>
