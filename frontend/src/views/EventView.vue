@@ -14,7 +14,7 @@
         <div v-if="$store.state.events.length > 0">
           <div :key="index" v-for="(event, index) in $store.state.events">
             <div @click="selectEvent(index)" class="wrapper">
-              <img src="../assets/Logo.png" alt />
+              <img src="../assets/logo.png" alt />
               <div id="eventcell-info">
                 <h2>{{ event.eventTitle }}</h2>
               </div>
@@ -33,14 +33,19 @@
           <div
             :key="goer"
             v-for="goer in $store.state.events[$store.state.eventIndex].eventGoers"
-          >{{ goer }}
-          </div>
+          >{{ goer }}</div>
           <div v-if="$store.state.loggedIn">
-            <div v-if="!$store.state.events[$store.state.eventIndex].eventGoers.includes($store.state.userName, 0)">
-              <input type="button" value="Attend event" @click="$store.dispatch('attendEvent')">
+            <div
+              v-if="!$store.state.events[$store.state.eventIndex].eventGoers.includes($store.state.userName, 0)"
+            >
+              <input type="button" value="Attend event" @click="$store.dispatch('attendEvent')" />
             </div>
             <div v-else>
-              <input type="button" value="Stop attending event" @click="$store.dispatch('attendEvent')">
+              <input
+                type="button"
+                value="Stop attending event"
+                @click="$store.dispatch('attendEvent')"
+              />
             </div>
           </div>
         </div>

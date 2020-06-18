@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <img src="./assets/Logo.png" alt="Logo" />
+      <img src="./assets/logo.png" alt="logo" />
       <div>Sporty</div>
       <nav id="links">
         <router-link to="/">Home</router-link>
