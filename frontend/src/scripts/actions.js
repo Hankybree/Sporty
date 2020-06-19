@@ -59,20 +59,21 @@ export const actions = {
     },
     attendEvent(context) {
 
-        let attendees = context.state.events[context.state.eventIndex].eventGoers
+        let attendeeExist
 
         if (!context.state.events[context.state.eventIndex].eventGoers.includes(context.state.userName, 0)) {
-            attendees.push(context.state.userName)
+            attendeeExist = false
         } else {
-            attendees.splice(attendees.indexOf(context.state.userName), 1)
+            attendeeExist = true
         }
 
         fetch('http://localhost:3500/attend/' + context.state.events[context.state.eventIndex].eventId, {
             body: JSON.stringify({
-                eventGoers: attendees
+                attendeeExist: attendeeExist
             }),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Token': localStorage.getItem('token')
             },
             method: 'PATCH'
         }).then(response => response.json())
@@ -132,6 +133,7 @@ export const actions = {
         }
     },
     login(context) {
+        console.log('Called')
         fetch('http://localhost:3500/login', {
             body: JSON.stringify({
                 userName: document.querySelector('#login-name').value,
@@ -164,7 +166,6 @@ export const actions = {
                 localStorage.removeItem('token')
                 context.commit('setActiveUser', -1)
                 context.commit('setLoggedIn', false)
-                window.location.replace('/')
                 alert(result.message)
             })
     },

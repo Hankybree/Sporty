@@ -61,7 +61,7 @@
           {{ $store.state.events[$store.state.eventIndex].eventUserName }}
         </div>
 
-        <div v-if="$store.state.activeUser === $store.state.events[eventIndex].eventUser">
+        <div v-if="$store.state.activeUser === $store.state.events[eventIndex].eventUserId">
           <input type="button" value="Edit" @click="$store.dispatch('openPatchUI')" />
           <div id="patch-ui" v-if="$store.state.showPatchUI">
             <UpdateEvent></UpdateEvent>

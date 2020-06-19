@@ -103,14 +103,6 @@ module.exports = function (app, database, accessToken, authenticate) {
             })
     })
 
-    // Only for testing
-    app.get('/sessions', (request, response) => {
-        database.all('SELECT * FROM sessions')
-            .then((sessions) => {
-                response.send(sessions)
-            })
-    })
-
     app.get('/session', (request, response) => {
 
         database.all('SELECT * FROM sessions WHERE sessionToken=?', [request.get('Token')])
@@ -120,6 +112,14 @@ module.exports = function (app, database, accessToken, authenticate) {
                     .then((users) => {
                         response.send({ userId: sessions[0].sessionUserId, userName: users[0].userName })
                     })
+            })
+    })
+
+    // Only for testing
+    app.get('/sessions', (request, response) => {
+        database.all('SELECT * FROM sessions')
+            .then((sessions) => {
+                response.send(sessions)
             })
     })
 

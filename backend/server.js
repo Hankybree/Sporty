@@ -32,7 +32,6 @@ const authenticate = function (token) {
                 })
 
         } else {
-
             resolve(-1)
         }
     })
