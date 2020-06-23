@@ -34,7 +34,7 @@
             :key="goer"
             v-for="goer in $store.state.events[$store.state.eventIndex].eventGoers"
           >{{ goer }}</div>
-          <div v-if="$store.state.loggedIn">
+          <div v-if="$store.state.loggedIn && $store.state.userName !== $store.state.events[$store.state.eventIndex].eventUserName">
             <div
               v-if="!$store.state.events[$store.state.eventIndex].eventGoers.includes($store.state.userName, 0)"
             >
