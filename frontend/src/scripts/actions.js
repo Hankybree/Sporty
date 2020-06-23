@@ -106,6 +106,7 @@ export const actions = {
         }).then(response => response.json())
         .then(result => {
             console.log(result)
+            document.querySelector('#commentary-input').value = ''
             context.dispatch('getEvents')
         })
     },
@@ -160,7 +161,6 @@ export const actions = {
         }
     },
     login(context) {
-        console.log('Called')
         fetch('http://localhost:3500/login', {
             body: JSON.stringify({
                 userName: document.querySelector('#login-name').value,

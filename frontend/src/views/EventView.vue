@@ -90,7 +90,7 @@
               <br><br>
               Written by: {{ commentary.user }}
             <div v-if="commentary.user === $store.state.userName">
-              <input type="button" value="Delete commentary" @click="deleteComment()">
+              <input type="button" value="Delete comment" @click="deleteComment()">
             </div>
             </div>
           </div>
