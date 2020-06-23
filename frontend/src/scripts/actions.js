@@ -8,11 +8,16 @@ export const actions = {
             })
     },
     postEvent(context) {
+        console.log('Called')
         fetch('http://localhost:3500/events', {
             body: JSON.stringify({
                 eventSport: document.querySelector('#post-sport').value,
                 eventTitle: document.querySelector('#post-title').value,
-                eventDescription: document.querySelector('#post-description').value
+                eventDescription: document.querySelector('#post-description').value,
+                eventDate: document.querySelector('#post-date').value + ' ' + document.querySelector('#post-time').value,
+                eventLocation: document.querySelector('#post-location').value,
+                eventPrice: parseFloat(document.querySelector('#post-price').value),
+                eventMaxAttend: parseInt(document.querySelector('#post-max').value)
             }),
             headers: {
                 'Content-Type': 'application/json',

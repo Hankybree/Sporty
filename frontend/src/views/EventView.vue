@@ -28,6 +28,10 @@
       <div v-if="$store.state.events.length > 0">
         <h1 id="title">{{ $store.state.events[$store.state.eventIndex].eventTitle }}</h1>
 
+        <div id="time-and-place">
+          This event takes place {{ $store.state.events[$store.state.eventIndex].eventDate }} at {{ $store.state.events[$store.state.eventIndex].eventLocation }}
+        </div>
+
         <h2>These will come:</h2>
         <div id="participants">
           <div
@@ -48,6 +52,14 @@
               />
             </div>
           </div>
+        </div>
+
+        <div v-if="$store.state.events[$store.state.eventIndex].eventMaxAttend !== null">
+            Maximum number of attendees is: {{ $store.state.events[$store.state.eventIndex].eventMaxAttend }}
+        </div>
+
+        <div>
+          The price is: {{ $store.state.events[$store.state.eventIndex].eventPrice }} SEK
         </div>
 
         <div id="type">

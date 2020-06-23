@@ -6,6 +6,7 @@ module.exports = function (app, database, authenticate) {
 
                 events.forEach(event => {
                     event.eventGoers = JSON.parse(event.eventGoers)
+                    event.eventCommentaries = JSON.parse(event.eventCommentaries)
                 })
 
                 response.send(events)
@@ -15,8 +16,8 @@ module.exports = function (app, database, authenticate) {
     app.get('/events/:event', (request, response) => {
         database.all('SELECT * FROM events WHERE eventId=?', [request.params.event])
             .then((events) => {
-                console.log(events[0])
                 events[0].eventGoers = JSON.parse(events[0].eventGoers)
+                events[0].eventCommentaries = JSON.parse(events[0].eventCommentaries)
 
                 response.send(events[0])
             })
@@ -31,11 +32,16 @@ module.exports = function (app, database, authenticate) {
                     database.all('SELECT * FROM users WHERE userId=?', [user])
                         .then((users) => {
 
-                            database.run('INSERT INTO events (eventSport, eventTitle, eventDescription, eventGoers, eventUserId, eventUserName) VALUES (?, ?, ?, ?, ?, ?)',
+                            database.run('INSERT INTO events (eventSport, eventTitle, eventDescription, eventDate, eventLocation, eventPrice, eventMaxAttend, eventCommentaries, eventGoers, eventUserId, eventUserName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                                 [
                                     request.body.eventSport,
                                     request.body.eventTitle,
                                     request.body.eventDescription,
+                                    request.body.eventDate,
+                                    request.body.eventLocation,
+                                    request.body.eventPrice,
+                                    request.body.eventMaxAttend,
+                                    JSON.stringify([]),
                                     JSON.stringify([users[0].userName]),
                                     user,
                                     users[0].userName
