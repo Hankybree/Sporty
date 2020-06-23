@@ -66,7 +66,6 @@ header {
   background-color: dimgray;
 
   height: 10vh;
-  width: 100vw;
 }
 header > img {
   object-fit: contain;

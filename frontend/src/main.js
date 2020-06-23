@@ -10,11 +10,11 @@ import SignUpView from './views/SignUpView.vue'
 
 import { actions } from './scripts/actions.js'
 
-import VideoBg from "vue-videobg";
+//import VideoBg from "vue-videobg";
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
-Vue.component("video-bg", VideoBg);
+//Vue.component("video-bg", VideoBg);
 
 const router = new VueRouter({
   routes: [
@@ -76,6 +76,6 @@ new Vue({
   render: h => h(App),
   router,
   store,
-  VideoBg
+  // VideoBg
 
 }).$mount('#app')
