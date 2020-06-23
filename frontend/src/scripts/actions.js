@@ -91,6 +91,24 @@ export const actions = {
                 context.dispatch('getEvents')
             })
     },
+    comment(context, addComment) {
+
+        fetch('http://localhost:3500/comment/' + context.state.events[context.state.eventIndex].eventId, {
+            body: JSON.stringify({
+                addComment: addComment,
+                message: document.querySelector('#commentary-input').value
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': localStorage.getItem('token')
+            },
+            method: 'PATCH'
+        }).then(response => response.json())
+        .then(result => {
+            console.log(result)
+            context.dispatch('getEvents')
+        })
+    },
     openPostUI(context) {
         if (!context.state.showPostUI) {
             context.commit('setPostUI', true)

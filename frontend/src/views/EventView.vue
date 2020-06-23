@@ -80,6 +80,20 @@
           </div>
           <input type="button" value="Delete" @click="$store.dispatch('deleteEvent')" />
         </div>
+
+        <div id="commentaries">
+          <textarea id="commentary-input" cols="30" rows="5" placeholder="Write a commentary..."></textarea>
+          <input type="button" value="Comment" @click="postComment()">
+          <div :key="index" v-for="(commentary, index) in $store.state.events[eventIndex].eventCommentaries">
+            <div class="commentary">
+              {{ commentary.message }}
+              Written by: {{ commentary.user }}
+            <div v-if="commentary.user === $store.state.userName">
+              <input type="button" value="Delete commentary" @click="deleteComment()">
+            </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div v-else>
         <h1>Wow how empty. You should create a new event!</h1>
@@ -106,6 +120,14 @@ export default {
   methods: {
     selectEvent(newIndex) {
       this.$store.commit("setEventIndex", newIndex);
+    },
+    postComment() {
+      let addComment = true
+      this.$store.dispatch('comment', addComment)
+    },
+    deleteComment() {
+      let addComment = false
+      this.$store.dispatch('comment', addComment)
     }
   }
 };
@@ -114,6 +136,21 @@ export default {
 <style scoped>
 .content {
   display: flex;
+}
+#event {
+  display: flex;
+}
+#event > div {
+  margin: auto;
+}
+#commentaries {
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+}
+.commentary {
+  background-color: white;
+  border-radius: 1em;
 }
 #event-list {
   display: flex;

@@ -129,6 +129,47 @@ module.exports = function (app, database, authenticate) {
                 }
             })
     })
+    
+    app.patch('/comment/:event', (request, response) => {
+
+        authenticate(request.get('Token'))
+            .then((user) => {
+
+                if (user !== -1) {
+                    database.all('SELECT * FROM users WHERE userId=?', [user])
+                        .then((users) => {
+
+                            database.all('SELECT * FROM events WHERE eventId=?', [request.params.event])
+                                .then((events) => {
+
+                                    events[0].eventCommentaries = JSON.parse(events[0].eventCommentaries)
+
+                                    if (request.body.addComment) {
+
+                                        let comment = {
+                                            user: users[0].userName,
+                                            message: request.body.message
+                                        }
+
+                                        events[0].eventCommentaries.push(comment)
+                                    } else {
+                                        events[0].eventCommentaries.splice(events[0].eventCommentaries.indexOf(users[0].userName), 1)
+                                    }
+
+                                    database.run('UPDATE events SET eventCommentaries=? WHERE eventId=?',
+                                        [
+                                            JSON.stringify(events[0].eventCommentaries),
+                                            request.params.event
+                                        ]).then(() => {
+                                            response.send(JSON.stringify({ message: 'Comment handled', status: 1 }))
+                                        })
+                                })
+                        })
+                } else {
+                    response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
+                }
+            })
+    })
 
     app.delete('/events/:event', (request, response) => {
 
