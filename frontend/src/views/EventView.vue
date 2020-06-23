@@ -87,6 +87,7 @@
           <div :key="index" v-for="(commentary, index) in $store.state.events[eventIndex].eventCommentaries">
             <div class="commentary">
               {{ commentary.message }}
+              <br><br>
               Written by: {{ commentary.user }}
             <div v-if="commentary.user === $store.state.userName">
               <input type="button" value="Delete commentary" @click="deleteComment()">
@@ -151,6 +152,9 @@ export default {
 .commentary {
   background-color: white;
   border-radius: 1em;
+  border: solid 0.5px rgba(0, 0, 0, 0.425);
+  margin: 5px;
+  padding: 5px;
 }
 #event-list {
   display: flex;
