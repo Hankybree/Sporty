@@ -37,6 +37,10 @@ export const actions = {
                 eventSport: document.querySelector('#patch-sport').value,
                 eventTitle: document.querySelector('#patch-title').value,
                 eventDescription: document.querySelector('#patch-description').value,
+                eventDate: document.querySelector('#patch-date').value + ' ' + document.querySelector('#patch-time').value,
+                eventLocation: document.querySelector('#patch-location').value,
+                eventPrice: parseFloat(document.querySelector('#patch-price').value),
+                eventMaxAttend: parseInt(document.querySelector('#patch-max').value)
             }),
             headers: {
                 'Content-Type': 'application/json',

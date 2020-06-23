@@ -75,11 +75,15 @@ module.exports = function (app, database, authenticate) {
 
                             let updatedEvent = Object.assign(events[0], request.body)
 
-                            database.run('UPDATE events SET eventSport=?, eventTitle=?, eventDescription=? WHERE eventId=?',
+                            database.run('UPDATE events SET eventSport=?, eventTitle=?, eventDescription=?, eventDate=?, eventLocation=?, eventPrice=?, eventMaxAttend=? WHERE eventId=?',
                                 [
                                     updatedEvent.eventSport,
                                     updatedEvent.eventTitle,
                                     updatedEvent.eventDescription,
+                                    updatedEvent.eventDate,
+                                    updatedEvent.eventLocation,
+                                    updatedEvent.eventPrice,
+                                    updatedEvent.eventMaxAttend,
                                     request.params.event
                                 ]).then(() => {
                                     response.send(JSON.stringify({ message: 'Event updated', status: 1 }))
