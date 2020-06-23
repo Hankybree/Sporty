@@ -210,5 +210,8 @@ export const actions = {
                 window.location.replace('/')
                 alert(result.message)
             })
+    },
+    hackDollsKill() {
+        console.log('<3')
     }
-}
+ }
