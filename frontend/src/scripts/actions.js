@@ -173,6 +173,7 @@ export const actions = {
         }).then(response => response.json())
             .then(result => {
                 if (result.status === 1) {
+                    console.log(result)
                     localStorage.setItem('token', result.token)
                     context.commit('setActiveUser', result.userId)
                     context.commit('setUserName', result.userName)
@@ -210,8 +211,5 @@ export const actions = {
                 window.location.replace('/')
                 alert(result.message)
             })
-    },
-    hackDollsKill() {
-        console.log('<3')
     }
  }
