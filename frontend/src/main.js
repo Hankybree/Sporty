@@ -7,6 +7,8 @@ import HomeView from './views/HomeView.vue'
 import ProfileView from './views/ProfileView.vue'
 import EventView from './views/EventView.vue'
 import SignUpView from './views/SignUpView.vue'
+import ContactView from './views/ContactView.vue'
+import PrivacyView from './views/PrivacyView.vue'
 
 import { actions } from './scripts/actions.js'
 
@@ -21,7 +23,9 @@ const router = new VueRouter({
     { component: HomeView, path: '/' },
     { component: ProfileView, path: '/profile' },
     { component: EventView, path: '/events' },
-    { component: SignUpView, path: '/signup' }
+    { component: SignUpView, path: '/signup' },
+    { component: PrivacyView, path: '/privacypolicy'},
+    { component: ContactView, path: '/contact'}
   ]
 })
 

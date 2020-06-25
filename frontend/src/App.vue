@@ -18,6 +18,10 @@
       </div>
     </header>
     <router-view></router-view>
+    <footer>
+      <router-link to="/contact">Contact us</router-link>
+      <router-link to="/privacypolicy">Privacy policy</router-link>
+    </footer>
   </div>
 </template>
 
@@ -92,7 +96,7 @@ a {
   margin-right: 20px;
 }
 #view {
-  min-height: 80vh;
+  height: 80vh;
 }
 #relative {
   position: relative;
