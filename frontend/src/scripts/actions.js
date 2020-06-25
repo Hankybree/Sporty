@@ -104,11 +104,11 @@ export const actions = {
             },
             method: 'PATCH'
         }).then(response => response.json())
-        .then(result => {
-            console.log(result)
-            document.querySelector('#commentary-input').value = ''
-            context.dispatch('getEvents')
-        })
+            .then(result => {
+                console.log(result)
+                document.querySelector('#commentary-input').value = ''
+                context.dispatch('getEvents')
+            })
     },
     openPostUI(context) {
         if (!context.state.showPostUI) {
@@ -211,5 +211,35 @@ export const actions = {
                 window.location.replace('/')
                 alert(result.message)
             })
+    },
+    sendMail() {
+
+        const subject = document.querySelector('#contact-subject')
+        const mail = document.querySelector('#contact-mail')
+        const message = document.querySelector('#contact-message')
+
+        if (subject.checkValidity() && mail.checkValidity() && message.checkValidity()) {
+            fetch('http://localhost:3500/contact', {
+                body: JSON.stringify({
+                    subject: subject.value,
+                    mail: mail.value,
+                    message: message.value
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST'
+            }).then(response => response.json())
+                .then(result => {
+
+                    document.querySelector('#contact-subject').value = ''
+                    document.querySelector('#contact-mail').value = ''
+                    document.querySelector('#contact-message').value = ''
+
+                    alert(result.message)
+                })
+        } else {
+            alert('Fill in all fields')
+        }
     }
- }
+}

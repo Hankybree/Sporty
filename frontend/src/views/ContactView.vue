@@ -5,7 +5,7 @@
           <input id="contact-subject" type="text" placeholder="Subject..." required>
           <input id="contact-mail" type="email" placeholder="Your e-mail..." required>
           <textarea id="contact-message" cols="30" rows="10" placeholder="Enter your message here..." required></textarea>
-          <input id="contact-button" type="submit" value="Submit question" @click.prevent="sendMessage()">
+          <input id="contact-button" type="submit" value="Submit question" @click.prevent="$store.dispatch('sendMail')">
       </form>
   </div>
 </template>
