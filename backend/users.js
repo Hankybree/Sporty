@@ -27,6 +27,31 @@ module.exports = function (app, database, accessToken, authenticate, nodemailer,
             }
         })
     }
+    const sendResetPassword = function (mailAddress, resetToken, response) {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: secret().mail,
+                pass: secret().pw
+            }
+        })
+        const mailOptions = {
+            from: secret().mail,
+            to: [mailAddress],
+            subject: 'Password reset',
+            text: 'To reset your password follow this link: \n\n<a href="http://localhost:8080/#/' + resetToken + '">Reset password</a> \n\nThis link will cease to exist in one hour. \n\nBest regards, \n\nSporty'
+        }
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                response.send(JSON.stringify({ message: 'An error ocurred. Message is not sent', status: 2 }))
+            } else {
+                response.status(201).send(JSON.stringify({ message: 'Follow the link in your e-mail to reset password', status: 1 }))
+            }
+        })
+    }
 
     app.post('/signup', (request, response) => {
 
@@ -143,6 +168,58 @@ module.exports = function (app, database, accessToken, authenticate, nodemailer,
                     .then((users) => {
                         response.send({ userId: sessions[0].sessionUserId, userName: users[0].userName })
                     })
+            })
+    })
+
+    app.post('http://localhost:3500/resetpassword', (request, response) => {
+        
+        database.all('SELECT * FROM users WHERE userName=?', [request.body.userName])
+            .then((users) => {
+                
+                if (!users) {
+                    response.send(JSON.stringify({ message: 'User does not exist', status: 2}))
+                } else {
+
+                    const resetToken = accessToken.v4()
+
+                    database.run('INSERT INTO resets (resetToken, resetUserName) VALUES (?, ?)', 
+                    [
+                        resetToken,
+                        request.body.userName
+                    ]).then(() => {
+
+                        sendResetPassword(users[0].userMail, resetToken, response)
+                    })
+                }
+            })
+    })
+
+    app.patch('http://localhost:3500/resetpassword/:token', (request, response) => {
+
+        database.all('SELECT * FROM resets WHERE resetToken=?', [request.params.token])
+            .then((resets) => {
+
+                if (!resets) {
+                    response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
+                } else {
+
+                    const saltRounds = 10
+
+                    bcrypt.hash(request.body.userPassword, saltRounds, function (err, hash) {
+
+                        database.run('UPDATE users SET userPassword=? WHERE userName=?',
+                            [
+                                hash,
+                                resets[0].resetUserName
+                            ]).then(() => {
+
+                                database.run('DELETE FROM resets WHERE resetToken=?', [resets[0].resetToken])
+                                    .then(() => {
+                                        response.send(JSON.stringify({ message: 'Password updated', status: 1 }))
+                                    })
+                            })
+                    })
+                }
             })
     })
 
