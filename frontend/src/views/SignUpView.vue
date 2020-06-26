@@ -55,7 +55,7 @@ input {
   font-size: 20px;
 }
 #info {
-  background-image: url("../assets/daniel-van-den-berg-29Jx9qyTW14-unsplash.jpg");
+  /* background-image: url("../assets/daniel-van-den-berg-29Jx9qyTW14-unsplash.jpg"); */
   width: 60vw;
 }
 #div {

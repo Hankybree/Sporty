@@ -38,20 +38,7 @@ const authenticate = function (token) {
         }
     })
 }
-
-sqlite.open({ driver: sqlite3.Database, filename: 'database.sqlite' })
-    .then((database_) => {
-        database = database_
-
-        events(app, database, authenticate)
-        users(app, database, { v4: uuidv4 }, authenticate)
-    })
-
-app.post('/contact', (request, response) => {
-    contactUs(request.body.subject, request.body.mail, request.body.message, response)
-})
-
-function contactUs(subject, mailAddress, message, response) {
+const contactUs = function(subject, mailAddress, message, response) {
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -76,3 +63,15 @@ function contactUs(subject, mailAddress, message, response) {
         }
     })
 }
+
+sqlite.open({ driver: sqlite3.Database, filename: 'database.sqlite' })
+    .then((database_) => {
+        database = database_
+
+        events(app, database, authenticate)
+        users(app, database, { v4: uuidv4 }, authenticate, nodemailer, secret)
+    })
+
+app.post('/contact', (request, response) => {
+    contactUs(request.body.subject, request.body.mail, request.body.message, response)
+})

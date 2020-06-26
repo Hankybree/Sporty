@@ -1,4 +1,32 @@
-module.exports = function (app, database, accessToken, authenticate) {
+module.exports = function (app, database, accessToken, authenticate, nodemailer, secret) {
+
+    const bcrypt = require('bcrypt')
+
+    const sendConfirmation = function (mailAddress, response) {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: secret().mail,
+                pass: secret().pw
+            }
+        })
+        const mailOptions = {
+            from: secret().mail,
+            to: [mailAddress],
+            subject: 'Welcome to Sporty!',
+            text: 'This is a confirmation that you successfully joined Sporty. Now there will be no more days sporting solo. Unless you want that ofcourse! \n\nBest regards, \n\nSporty'
+        }
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                response.send(JSON.stringify({ message: 'An error ocurred. Message is not sent', status: 2 }))
+            } else {
+                response.status(201).send(JSON.stringify({ message: 'User created', status: 1 }))
+            }
+        })
+    }
 
     app.post('/signup', (request, response) => {
 
@@ -7,20 +35,22 @@ module.exports = function (app, database, accessToken, authenticate) {
 
                 if (users[0] === undefined) {
 
-                    database.run('INSERT INTO users (userName, userPassword, userMail, userDescription, userEvents) VALUES (?, ?, ?, ?, ?)',
-                        [
-                            request.body.userName,
-                            request.body.userPassword,
-                            request.body.userMail,
-                            '',
-                            '[]'
-                        ]).then(() => {
+                    const saltRounds = 10
 
-                            response.status(201).send(JSON.stringify({ message: 'User created', status: 1 }))
-                        }).catch((error) => {
-
-                            response.send(error)
-                        })
+                    bcrypt.hash(request.body.userPassword, saltRounds, function (err, hash) {
+                        database.run('INSERT INTO users (userName, userPassword, userMail, userDescription, userEvents) VALUES (?, ?, ?, ?, ?)',
+                            [
+                                request.body.userName,
+                                hash,
+                                request.body.userMail,
+                                '',
+                                '[]'
+                            ]).then(() => {
+                                sendConfirmation(request.body.userMail, response)
+                            }).catch((error) => {
+                                response.send(error)
+                            })
+                    })
                 } else {
                     response.send(JSON.stringify({ message: 'Username is already in use', status: 2 }))
                 }
@@ -37,30 +67,31 @@ module.exports = function (app, database, accessToken, authenticate) {
                     return
                 }
 
-                if (users[0].userPassword === request.body.userPassword) {
+                bcrypt.compare(request.body.userPassword, users[0].userPassword, function (err, result) {
+                    if (result) {
+                        database.all('SELECT * FROM sessions WHERE sessionUserId=?', [users[0].userId])
+                            .then((sessions) => {
+                                if (sessions[0] === undefined) {
 
-                    database.all('SELECT * FROM sessions WHERE sessionUserId=?', [users[0].userId])
-                        .then((sessions) => {
-                            if (sessions[0] === undefined) {
+                                    const token = accessToken.v4()
+                                    const userId = users[0].userId
+                                    const userName = users[0].userName
 
-                                const token = accessToken.v4()
-                                const userId = users[0].userId
-                                const userName = users[0].userName
-
-                                database.run('INSERT INTO sessions (sessionUserId, sessionToken) VALUES (?, ?)',
-                                    [
-                                        userId,
-                                        token
-                                    ]).then(() => {
-                                        response.send(JSON.stringify({ message: 'Logged in', status: 1, token: token, userId: userId, userName: userName }))
-                                    })
-                            } else {
-                                response.send(JSON.stringify({ message: 'Already logged in', status: 3 }))
-                            }
-                        })
-                } else {
-                    response.send(JSON.stringify({ message: 'Incorrect username or password', status: 2 }))
-                }
+                                    database.run('INSERT INTO sessions (sessionUserId, sessionToken) VALUES (?, ?)',
+                                        [
+                                            userId,
+                                            token
+                                        ]).then(() => {
+                                            response.send(JSON.stringify({ message: 'Logged in', status: 1, token: token, userId: userId, userName: userName }))
+                                        })
+                                } else {
+                                    response.send(JSON.stringify({ message: 'Already logged in', status: 3 }))
+                                }
+                            })
+                    } else {
+                        response.send(JSON.stringify({ message: 'Incorrect username or password', status: 2 }))
+                    }
+                })
             })
     })
 
@@ -82,7 +113,7 @@ module.exports = function (app, database, accessToken, authenticate) {
 
         authenticate(request.get('Token'))
             .then((user) => {
-                
+
                 if (user !== -1) {
                     database.run('DELETE FROM users WHERE userId=?', [user])
                         .then(() => {
