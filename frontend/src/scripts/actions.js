@@ -246,9 +246,9 @@ export const actions = {
         let url = window.location.href
         const firstIndexOfToken = url.lastIndexOf('/') + 1
 
-        this.resetToken = url.substr(firstIndexOfToken, 36)
+        context.commit('setResetToken', url.substr(firstIndexOfToken, 36))
 
-        fetch('http://localhost:3500/reset/' + this.resetToken)
+        fetch('http://localhost:3500/reset/' + context.state.resetToken)
             .then(response => response.json())
             .then(result => {
                 if (result.status === 1) {

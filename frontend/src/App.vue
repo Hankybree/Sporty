@@ -11,6 +11,7 @@
         <div v-if="!$store.state.loggedIn">
           <LogIn></LogIn>
           <router-link to="/signup">Got no account? Sign up here!</router-link>
+          <router-link to="/forgotpassword">Forgot your password?</router-link>
         </div>
         <div v-else>
           <LogOut></LogOut>

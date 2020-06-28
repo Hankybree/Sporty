@@ -176,7 +176,7 @@ module.exports = function (app, database, accessToken, authenticate, nodemailer,
         database.all('SELECT * FROM users WHERE userName=?', [request.body.userName])
             .then((users) => {
 
-                if (!users) {
+                if (!users[0]) {
                     response.send(JSON.stringify({ message: 'User does not exist', status: 2 }))
                 } else {
 
@@ -224,7 +224,9 @@ module.exports = function (app, database, accessToken, authenticate, nodemailer,
         database.all('SELECT * FROM resets WHERE resetToken=?', [request.params.token])
             .then((resets) => {
 
-                if (!resets) {
+                console.log(request.params.token)
+
+                if (!resets[0]) {
                     response.send(JSON.stringify({ message: 'Unauthorized', status: 2 }))
                 } else {
 
