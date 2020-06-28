@@ -41,7 +41,7 @@ module.exports = function (app, database, accessToken, authenticate, nodemailer,
             from: secret().mail,
             to: [mailAddress],
             subject: 'Password reset',
-            text: 'To reset your password follow this link: \n\n<a href="http://localhost:8080/#/' + resetToken + '">Reset password</a> \n\nThis link will cease to exist in one hour. \n\nBest regards, \n\nSporty'
+            text: 'To reset your password follow this link: \n\nhttp://localhost:8080/#/' + resetToken + ' \n\nThis link will cease to exist in one hour. \n\nBest regards, \n\nSporty'
         }
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -171,30 +171,55 @@ module.exports = function (app, database, accessToken, authenticate, nodemailer,
             })
     })
 
-    app.post('http://localhost:3500/resetpassword', (request, response) => {
-        
+    app.post('/resetpassword', (request, response) => {
+
         database.all('SELECT * FROM users WHERE userName=?', [request.body.userName])
             .then((users) => {
-                
+
                 if (!users) {
-                    response.send(JSON.stringify({ message: 'User does not exist', status: 2}))
+                    response.send(JSON.stringify({ message: 'User does not exist', status: 2 }))
                 } else {
 
-                    const resetToken = accessToken.v4()
+                    database.all('SELECT * FROM resets WHERE resetUserName=?', [users[0].userName])
+                        .then((resets) => {
+                            if (resets) {
 
-                    database.run('INSERT INTO resets (resetToken, resetUserName) VALUES (?, ?)', 
-                    [
-                        resetToken,
-                        request.body.userName
-                    ]).then(() => {
+                                database.run('DELETE FROM resets WHERE resetUserName=?', [users[0].userName])
+                                    .then(() => {
+                                        const resetToken = accessToken.v4()
 
-                        sendResetPassword(users[0].userMail, resetToken, response)
-                    })
+                                        database.run('INSERT INTO resets (resetToken, resetUserName) VALUES (?, ?)',
+                                            [
+                                                resetToken,
+                                                request.body.userName
+                                            ]).then(() => {
+
+                                                sendResetPassword(users[0].userMail, resetToken, response)
+                                            })
+                                    })
+                            } else {
+
+                                const resetToken = accessToken.v4()
+
+                                database.run('INSERT INTO resets (resetToken, resetUserName) VALUES (?, ?)',
+                                    [
+                                        resetToken,
+                                        request.body.userName
+                                    ]).then(() => {
+
+                                        sendResetPassword(users[0].userMail, resetToken, response)
+                                    })
+                            }
+
+                            setTimeout(() => {
+                                database.run('DELETE FROM resets WHERE resetUserName=?', [users[0].userName])
+                            }, (60 * 60 * 1000))
+                        })
                 }
             })
     })
 
-    app.patch('http://localhost:3500/resetpassword/:token', (request, response) => {
+    app.patch('/resetpassword/:token', (request, response) => {
 
         database.all('SELECT * FROM resets WHERE resetToken=?', [request.params.token])
             .then((resets) => {
@@ -223,6 +248,17 @@ module.exports = function (app, database, accessToken, authenticate, nodemailer,
             })
     })
 
+    app.get('/reset/:token', (request, response) => {
+        database.all('SELECT * FROM resets WHERE resetToken=?', [request.params.token])
+            .then((resets) => {
+                if (resets[0]) {
+                    response.send(JSON.stringify({ message: 'Reset is authorized', status: 1}))
+                } else {
+                    response.send(JSON.stringify({ message: 'Reset not found', status: 2}))
+                }
+            })
+    })
+
     // Only for testing
     app.get('/sessions', (request, response) => {
         database.all('SELECT * FROM sessions')
@@ -241,6 +277,13 @@ module.exports = function (app, database, accessToken, authenticate, nodemailer,
                 }
 
                 response.send(users)
+            })
+    })
+
+    app.get('/resets', (request, response) => {
+        database.all('SELECT * FROM resets')
+            .then((resets) => {
+                response.send(resets)
             })
     })
 }

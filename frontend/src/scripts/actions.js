@@ -241,5 +241,21 @@ export const actions = {
         } else {
             alert('Fill in all fields')
         }
+    },
+    validateReset(context) {
+        let url = window.location.href
+        const firstIndexOfToken = url.lastIndexOf('/') + 1
+
+        this.resetToken = url.substr(firstIndexOfToken, 36)
+
+        fetch('http://localhost:3500/reset/' + this.resetToken)
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 1) {
+                    context.commit('setCanReset', true)
+                } else {
+                    context.commit('setCanReset', false)
+                }
+            })
     }
 }

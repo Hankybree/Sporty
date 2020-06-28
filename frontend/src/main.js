@@ -9,6 +9,7 @@ import EventView from './views/EventView.vue'
 import SignUpView from './views/SignUpView.vue'
 import ContactView from './views/ContactView.vue'
 import PrivacyView from './views/PrivacyView.vue'
+import ResetPasswordView from './views/ResetPasswordView.vue'
 
 import { actions } from './scripts/actions.js'
 
@@ -25,7 +26,8 @@ const router = new VueRouter({
     { component: EventView, path: '/events' },
     { component: SignUpView, path: '/signup' },
     { component: PrivacyView, path: '/privacypolicy'},
-    { component: ContactView, path: '/contact'}
+    { component: ContactView, path: '/contact'},
+    { component: ResetPasswordView, path: '/:resettoken'}
   ]
 })
 
@@ -47,7 +49,8 @@ const store = new Vuex.Store({
     showPatchUI: false,
     activeUser: -1,
     userName: '',
-    loggedIn: false
+    loggedIn: false,
+    canReset: false
   },
   mutations: {
     setEvents(state, newEvents) {
@@ -70,6 +73,9 @@ const store = new Vuex.Store({
     },
     setUserName(state, newUserName) {
       state.userName = newUserName
+    },
+    setCanReset(state, newReset) {
+      state.canReset = newReset
     }
   }
 })
