@@ -11,12 +11,15 @@
           </div>
         </div>
 
-        <div v-if="$store.state.events.length > 0">
-          <div :key="index" v-for="(event, index) in $store.state.events">
+        <input id="search-bar" type="text" placeholder="Search by date..." @input="valueChange()" />
+
+        <div v-if="$store.state.filteredEvents.length > 0">
+          <div :key="index" v-for="(event, index) in $store.state.filteredEvents">
             <div @click="selectEvent(index)" class="wrapper">
               <img src="../assets/logo.png" alt />
               <div id="eventcell-info">
                 <h2>{{ event.eventTitle }}</h2>
+                {{ event.eventDate }}
               </div>
             </div>
           </div>
@@ -28,9 +31,9 @@
       <div v-if="$store.state.events.length > 0">
         <h1 id="title">{{ $store.state.events[$store.state.eventIndex].eventTitle }}</h1>
 
-        <div id="time-and-place">
-          This event takes place {{ $store.state.events[$store.state.eventIndex].eventDate }} at {{ $store.state.events[$store.state.eventIndex].eventLocation }}
-        </div>
+        <div
+          id="time-and-place"
+        >This event takes place {{ $store.state.events[$store.state.eventIndex].eventDate }} at {{ $store.state.events[$store.state.eventIndex].eventLocation }}</div>
 
         <h2>These will come:</h2>
         <div id="participants">
@@ -38,7 +41,9 @@
             :key="goer"
             v-for="goer in $store.state.events[$store.state.eventIndex].eventGoers"
           >{{ goer }}</div>
-          <div v-if="$store.state.loggedIn && $store.state.userName !== $store.state.events[$store.state.eventIndex].eventUserName">
+          <div
+            v-if="$store.state.loggedIn && $store.state.userName !== $store.state.events[$store.state.eventIndex].eventUserName"
+          >
             <div
               v-if="!$store.state.events[$store.state.eventIndex].eventGoers.includes($store.state.userName, 0)"
             >
@@ -54,13 +59,11 @@
           </div>
         </div>
 
-        <div v-if="$store.state.events[$store.state.eventIndex].eventMaxAttend !== null">
-            Maximum number of attendees is: {{ $store.state.events[$store.state.eventIndex].eventMaxAttend }}
-        </div>
+        <div
+          v-if="$store.state.events[$store.state.eventIndex].eventMaxAttend !== null"
+        >Maximum number of attendees is: {{ $store.state.events[$store.state.eventIndex].eventMaxAttend }}</div>
 
-        <div>
-          The price is: {{ $store.state.events[$store.state.eventIndex].eventPrice }} SEK
-        </div>
+        <div>The price is: {{ $store.state.events[$store.state.eventIndex].eventPrice }} SEK</div>
 
         <div id="type">
           <p>This is an event of type:</p>
@@ -83,15 +86,19 @@
 
         <div id="commentaries">
           <textarea id="commentary-input" cols="30" rows="5" placeholder="Write a commentary..."></textarea>
-          <input type="button" value="Comment" @click="postComment()">
-          <div :key="index" v-for="(commentary, index) in $store.state.events[eventIndex].eventCommentaries">
+          <input type="button" value="Comment" @click="postComment()" />
+          <div
+            :key="index"
+            v-for="(commentary, index) in $store.state.events[eventIndex].eventCommentaries"
+          >
             <div class="commentary">
               {{ commentary.message }}
-              <br><br>
+              <br />
+              <br />
               Written by: {{ commentary.user }}
-            <div v-if="commentary.user === $store.state.userName">
-              <input type="button" value="Delete comment" @click="deleteComment()">
-            </div>
+              <div v-if="commentary.user === $store.state.userName">
+                <input type="button" value="Delete comment" @click="deleteComment()" />
+              </div>
             </div>
           </div>
         </div>
@@ -123,12 +130,24 @@ export default {
       this.$store.commit("setEventIndex", newIndex);
     },
     postComment() {
-      let addComment = true
-      this.$store.dispatch('comment', addComment)
+      let addComment = true;
+      this.$store.dispatch("comment", addComment);
     },
     deleteComment() {
-      let addComment = false
-      this.$store.dispatch('comment', addComment)
+      let addComment = false;
+      this.$store.dispatch("comment", addComment);
+    },
+    valueChange() {
+
+      const filter = document.querySelector('#search-bar').value
+
+      if (filter === '') {
+        this.$store.commit('setFilteredEvents', this.$store.state.events)
+      } else {
+        this.$store.commit('setFilteredEvents', this.$store.state.events.filter((event) => {
+          return event.eventDate.includes(filter)
+        }))
+      }
     }
   }
 };
@@ -137,6 +156,10 @@ export default {
 <style scoped>
 .content {
   display: flex;
+}
+#eventcell-info {
+  color: black;
+  font-size: 12px;
 }
 #event {
   display: flex;

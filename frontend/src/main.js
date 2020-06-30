@@ -46,6 +46,7 @@ const store = new Vuex.Store({
         eventUserName: ''
       }
     ],
+    filteredEvents: [],
     eventIndex: 0,
     showPostUI: false,
     showPatchUI: false,
@@ -58,6 +59,9 @@ const store = new Vuex.Store({
   mutations: {
     setEvents(state, newEvents) {
       state.events = newEvents
+    },
+    setFilteredEvents(state, newFilteredEvents) {
+      state.filteredEvents = newFilteredEvents
     },
     setEventIndex(state, newIndex) {
       state.eventIndex = newIndex

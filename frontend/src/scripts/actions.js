@@ -5,6 +5,7 @@ export const actions = {
             .then(response => response.json())
             .then(result => {
                 context.commit('setEvents', result)
+                context.commit('setFilteredEvents', result)
             })
     },
     postEvent(context) {
